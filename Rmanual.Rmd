@@ -1,0 +1,42 @@
+---
+title: "R manuály"
+---
+
+```{r, include=FALSE}
+library(htmltools)
+
+item = function(title, href, popis = ""){
+  div(
+  div(class = "fluid-row",
+    div(class = "col-sm-1"),
+    div(class = "col-sm-1", 
+      div(a( title = title, href = href, span(class="glyphicon glyphicon-arrow-right", style="font-size:30px;vertical-align: baseline;padding-top:3px;margin:0px;line-height:1.4" )))
+    ), 
+    div(class = "col-sm-10", 
+           a(h4(title), href = href), 
+           p(popis, style="padding-bottom:10px")
+          )
+  )
+  )
+}
+```
+
+
+
+```{r, echo=FALSE}
+p(style="height:30px")
+
+item('Úvod do R', 'r_man_uvod.html', popis = "Popisuje instalaci, prostředí a základy práce s daty v R. Cílem je seznámení́ se základy efektivnı́ práce s Rkem, jsou zmı́něny základnı́ datové struktury, práce s nimi, základnı́ grafika.")
+
+hr()
+
+item('X', 'X.html', popis = "tetete  ")
+
+
+hr()
+
+p(style="height:120px")
+```
+
+
+

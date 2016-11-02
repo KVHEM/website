@@ -1,0 +1,9 @@
+---
+title: "Úvod"
+---
+
+<script>
+$(".nav li a").first().parent().addClass("active")
+</script>
+
+Tato stránka je dobrá

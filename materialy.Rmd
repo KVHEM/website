@@ -1,0 +1,78 @@
+---
+title: "Materiály"
+subtitle: "Okruhy:"
+output: 
+  html_document: 
+    toc: yes
+---
+
+
+
+
+```{r, include=FALSE}
+library(htmltools)
+
+item = function(title, href, popis = ""){
+  div(
+  div(class = "fluid-row",
+    div(class = "col-sm-1"),
+    div(class = "col-sm-1", 
+      div(a( title = title, href = href, span(class="glyphicon glyphicon-download-alt", style="font-size:30px;vertical-align: baseline;padding-top:3px;margin:0px;line-height:1.4" )))
+    ), 
+    div(class = "col-sm-10", 
+           a(h4(title, style="padding-top:5px;margin-top:5px;"), href = href), 
+           p(popis, style="padding-bottom:10px")
+          )
+  )
+  )
+}
+```
+
+
+
+### Letní školy
+
+
+
+```{r, echo=FALSE}
+#p(style="height:30px")
+
+item('Uncertainty in hydrological modelling', 'download/uncertainty_in_hydrological_modelling.zip', popis = "Přednášky Dr. Paula Torfse z letní školy 2010. Přednášky Dr. Paula Torfse z letní školy 2010. Přednášky Dr. Paula Torfse z letní školy 2010. Přednášky Dr. Paula Torfse z letní školy 2010.")
+
+item('X', 'X', popis = "tetete  ")
+
+#p(style="height:130px")
+```
+
+<hr>
+
+
+### Meteody vyhodnocování vodohospodářských dat
+
+```{r, echo=FALSE}
+#p(style="height:30px")
+
+item('Uncertainty in hydrological modelling', 'download/uncertainty_in_hydrological_modelling.zip', popis = "Přednášky Dr. Paula Torfse z letní školy 2010. Přednášky Dr. Paula Torfse z letní školy 2010. Přednášky Dr. Paula Torfse z letní školy 2010. Přednášky Dr. Paula Torfse z letní školy 2010.")
+
+item('X', 'X', popis = "tetete  ")
+
+# p(style="height:130px")
+```
+
+<hr>
+
+### Hydrologie
+
+
+
+```{r, echo=FALSE}
+#p(style="height:30px")
+
+item('Uncertainty in hydrological modelling', 'download/uncertainty_in_hydrological_modelling.zip', popis = "Přednášky Dr. Paula Torfse z letní školy 2010. Přednášky Dr. Paula Torfse z letní školy 2010. Přednášky Dr. Paula Torfse z letní školy 2010. Přednášky Dr. Paula Torfse z letní školy 2010.")
+
+item('X', 'X', popis = "tetete  ")
+
+# p(style="height:130px")
+```
+
+<p style="height:130px">

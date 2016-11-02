@@ -1,0 +1,994 @@
+---
+title: "Úvod do R"
+subtitle: "Obsah:"
+output: 
+  html_document: 
+    toc: yes
+---
+
+<script>
+$(".nav li:nth-child(2)").addClass("active")
+</script>
+
+<hr>
+
+## Instalace a základní používání
+
+
+Rko je programovací jazyk a prostředí pro statistické výpočty a grafiku. Rko mimo jiné
+
+- umožňuje efektivní manipulaci a ukládání dat
+- obsahuje sadu operátorů pro práci s datovými poli, zejména maticemi
+- obsahuje velkou konzistentní sadu nástrojů pro pokročilou analýzu dat
+- disponuje nástroji pro vizualizaci a prezentaci dat
+- je jednoduchým a efektivním programovacím jazykem
+
+
+Termín "prostředí" pro statistické výpočty zdůrazňuje, že Rko je flexibilním, nicméně přesně definovaným systémem. Základní Rko je neustále rozšiřováno pomocí balíků (packages).
+
+Rko pro Windows lze stáhnout z [webových stránek](http://www.r-project.org) (v levém menu CRAN $\rightarrow$ výběr serveru (např. Austria) $\rightarrow$ Download R for Windows $\rightarrow$ base $\rightarrow$ Download R X.XX for Windows).
+
+Základní distribuce Rka umožňuje přístup k Rku buď prostřednictvím konzole (zjednodušeně příkazové řádky) nebo v rámci jednoduchého uživatelského rozhraní R GUI, které mimo konzole obsahuje i základní nástroje pro editaci skriptu (programu), export grafických výstupů apod. Přestože prostřednictvím konzole máme přístup k veškeré funkcionalitě Rka, není práce s ní (interaktivní zadávání jednotlivých příkazů) vždy nejpohodlnější ani nejefektivnější. Například v situaci, kdy provádíme opakovaně sekvenci nějakých příkazů se nabízí tyto příkazy uložit do textového souboru (tzv. skriptu) a opakovaně jej spouštět, případně obměňovat. Skript můžeme editovat v jakémkoliv editoru textových souborů (včetně Notepadu, MS Wordu apod.), nicméně pro efektivní práci s kódem v jakémkoliv programovacím jazyku je vhodné, aby tento editor umožňoval zvýrazňování syntaxe (např. jinou barvou se zobrazují textové řetězce, čísla, rezervovaná slova atp.), případně doplňování kódu, správu přídavných balíků ad. Toto konzole ani základní R GUI neumožňuje. Z tohoto důvodu existuje pro Rko řada tzv. IDE (Integrated Development Environment), poskytující různou míru uživatelského komfortu. V současnosti nej-pokročilejším IDE je pravděpodobně RStudio.
+
+RStudio mimo jiné
+
+- integruje konzoli s editorem kódu, prohlížečem nápovědy, grafických výstupů a systému souborů
+- umožňuje efektivní práci s kódem (zvýrazňování syntaxe, doplňování kódu po stisku tabulátoru, systém klávesových zkratek)
+- umožňuje spouštění celého skriptu, aktuálního řádku či výběru pomocí tlačítek nebo klávesových zkratek
+- umožňuje prohlížení objektů nahraných do paměti prostřednictvím Rka
+- obsahuje nástroje pro integraci R kódů do prostředí LaTeX a Markdown (systémy pro efektivní tvorbu reportů, rozsáhlejších dokumentů a webových stránek)
+- umožňuje tvorbu html prezentací
+- poskytuje integrovanou podporu verzovacích systémů Git a Svn
+
+
+Web RStudia se nachází na http://www.rstudio.org, instalační soubor najdete pod Download RStudio $\rightarrow$ Download RStudio Desktop. V linuxových distribucích je Rko v repozitářích (balík `r-base`), v případě RStudia je nutné jeho balík stáhnout z webu.
+
+<hr>
+
+### Seznámení s RStudiem
+
+Po prvním spuštění je okno RStudia rozděleno na tři části:
+
+- v levé části se nachází konzole pro psaní příkazů,
+- v pravé horní části okno s přehledem dat (zatím prázdné) a historií příkazů,
+- v pravé dolní části okno se správcem souborů, grafy, balíky a nápovědou.
+
+Práce s Rkem spočívá v psaní kódu (v programovacím jazyku R), který je následně zpracováván vlastním "programem" R (interpretem programovacího jazyka). Vložíme-li do konzole například
+
+
+```{r}
+446+446
+```
+
+
+Rko zadaný řádek vyhodnotí (protože umí vyhodnocovat matematické výrazy jako kalkulačka) a vypíše výsledek.
+
+> Vypočtěte v konzoli, kolik má rok minut.
+
+> Vyzkoušejte, k čemu slouží v konzoli šipky nahoru a dolů a tabulátor.
+
+> Kolik je `1/0`, `0/0`, `-1/0`?
+
+
+<hr>
+
+### Dostupné funkce a nápověda
+
+Rko obsahuje řadu funkcí, další funkce je možno získat v doplňujících balících a rovněž je možné vytvářet vlastní funkce. Funkce je definována názvem, seznamem argumentů a tělem funkce. Pomocí názvu funkci voláme, názvem je tedy např. `mean`, `log`, `plot` apod. Argumenty funkce jsou zjednodušeně objekty, se kterými funkce poté pracuje. Tělo funkce definuje operace, které se provádějí. Argumenty a tělo funkce lze zjistit pomocí funkcí `args` a `body`, napsáním názvu funkce do konzole nebo nejlépe pomocí nápovědy. Tu je možno zobrazit pomocí funkce `help` nebo zkráceně voláním `?` následovanám jménem funkce, např. `?seq`, v RStudiu i pomocí klávesy F1 stisknuté na funkci, k níž hledáme nápovědu (F2 zobrazí tělo funkce). Nápovědu k určitému balíku je možno zobrazit pomocí `help(package=x)`. V tomto případě je `package` argumentem funkce `help`, kterému zadáváme hodnotu `x`, tj. název balíku, pro který chceme zobrazit nápovědu (např. pokud chceme zobrazit nápovědu k balíku `stats`, píšeme `help(package = "stats")`).
+
+Nápověda má pevně danou strukturu. *Description* (popis) popisuje, co funkce dělá, *Usage*, (využití) uvádí možné typy použití. Součástí této části nápovědy je i popis volání funkce včetně argumentů. Argumenty jsou v kulatých závorkách buď jen vyjmenovány, v tom případě nemají nastavené výchozí hodnoty a je nutné je specifikovat ve volání funkce, nebo jsou udány ve formě jméno argumentu = hodnota, v tom případě není-li nastavení argumentu součástí volání funkce použije se tato hodnota. Někdy může být argument uveden i ve formě argument = vektor hodnot udávající možné hodnoty, výchozí hodnotou je pak zpravidla první prvek vektoru. Součástí seznamu argumentů může být i speciální argument `...`, který říká, že v principu je možné zadat další argumenty, které jsou v rámci funkce předány jiné volané funkci.
+
+Například funkce `cor` (korelace) má následující argumenty:
+
+```{r}
+args(cor)
+```
+
+
+přičemž
+
+.        |
+-------	 | --------------------------------------------------------
+	`x`    | musí být zadáno (volání `cor()` vede k chybové hlášce)
+	`y`    | má zadanou výchozí hodnotu (`NULL`) a zadávat se nemusí, tj. `cor(x = matrix(1:10))` projde bez chyby
+	`use`  | má zadanou výchozí hodnotu (`"everything"`) a zadávat se nemusí
+`method` | má výchozí hodnotu `"pearson"` a další možné hodnoty jsou `"kendall"` a `"spearman"`. V případě hodnot argumentů daných výčtem je zpravidla možné názvy zkracovat, tedy `cor(x = matrix(1:10), method = "spe"` je platným voláním a Rko vypočítá spearmanův korelační koeficient
+
+Sekce *Arguments* (argumenty) jednotlivé argumenty popisuje, další popis funkce je uveden v sekci *Details* (podrobnosti). Funkce zpravidla vrací nějakou hodnotu/hodnoty (ale nemusí, některé funkce jsou např. volány pro kreslení grafů), tyto hodnoty jsou popsány v části *Value* (hodnota), *References* (odkazy) udává odkazy na literaturu (např. popis použité statistické metody) a *See Also* (viz i) nabízí podobná témata. Užitečné bývají také závěrečné příklady (část *Examples* (příklady)).
+
+Funkce je možné volat několika způsoby:
+
+- v případě, že funkce nemá žádné argumenty nebo v případě, že všechny argumenty mají v rámci definice funkce přiřazené výchozí hodnoty, je možno volat funkci bez argumentů, srov. např. `Sys.time()` a `seq()`
+- pomocí nepojmenovaných argumentů - např. `seq(0, 1, .1)`. Argumenty pak musí být ve stejném pořadí, v  jakém jsou definovány (a zobrazeny v nápovědě).
+- pomocí pojmenovaných argumentů - např. srov. `seq(by = .1, to = 1, from = 0)` a `seq(.1, 1, 0)`
+
+<hr>
+
+### Proměnné
+
+Proměnné umožňují přiřadit jméno určitému objektu, například číslu, a dál pak s ním symbolicky pracovat. V~Rku vzniká proměnná automaticky, když dosud neznámému jménu přiřadíme hodnotu.
+
+Zadání proměnné
+
+```{r, error=TRUE}
+ahoj
+```
+
+ohlásí chybu, protože proměnná s tímto názvem nebyla dosud vytvořena. Přiřazením
+
+```{r}
+ahoj = 135
+```
+
+se proměnná vytvoří -- v RStudiu se zobrazí spolu se svou hodnotou v pravém horní části na záložce *Workspace*. Od té chvíle můžeme s proměnnou pracovat:
+
+```{r}
+ahoj^2
+```
+
+Proměnné je třeba pojmenovávat znaky bez diakritiky a bez mezer. Místo mezer je možné použít podtržítka, pomlčky nebo tečky.
+
+> Zjistěte, zda v Rku záleží na velikosti písmen v názvech proměnných.
+
+> Znovu vypočtěte, kolik má rok minut, tentokrát ale vytvořte proměnné `dni_v_roce` a `minut_za_den` a použijte je při výpočtu.}
+
+Kromě operátoru `=` zajišťujícího přiřazení se v Rku často používá i operátor `<-`, respektive `->`. Jejich význam je v podstatě stejný a operátory jsou ve většině případů zaměnitelné. Výjimkou jsou argumenty funkce, kde `=` nastavuje hodnotu argumentu, kdežto `<-` zároveň vytváří proměnnou. Operátory `=` a `<-` přiřazují výrazu na levé straně hodnotu výrazu na pravé straně, jediným způsobem, jak přiřazovat naopak, je `->`. Srovnej:
+
+```{r, eval=FALSE,echo=c(-1, -2)}
+x=0
+rm(x)
+a = 5
+b <- 10
+d <- a <- 2
+d = a = 2
+5 -> e
+5 = e
+sin(x=10)
+x
+sin(x<-10)
+x
+```
+
+Seznam všech proměnných je možné vypsat příkazem `ls()`. Stejný seznam se objevuje v okně *Workspace* RStudia. Proměnnou je možné smazat použitím `rm(ahoj)`, všechny proměnné najednou se smažou pomocí
+
+```{r, eval = FALSE}
+rm(list = ls())
+```
+
+případně v RStudiu ikonou *Clear All*.
+
+<hr>
+
+### Vytvoření a spuštění skriptu
+
+Pro opakované použití není praktické zadávat kód do konzole, ale ukládat ho do souboru (skriptu) a ten pak spouštět. V RStudiu vytvoříme nový skript volbou *File -- New -- R Script}* (případně ikonou nebo klávesovou zkratkou). V levé horní části se objeví okno s~textovým editorem, ve kterém se skript bude psát. Skript je třeba uložit (*File -- Save*, ikona na panelu nebo *Ctrl+S*), je vhodné používat příponu *.r* nebo *.R*.
+
+Nyní můžeme do editoru psát kód na libovolný počet řádků, aniž by se spouštěl.
+
+
+> Zadejte do editoru předchozí příklad -- výpočet počtu minut v~roce pomocí proměnných.
+
+Spustit kód uložený ve skriptu ("poslat kód do konzole") je možné více způsoby:
+
+
+- *Ctrl+Enter* (ikona *Run*, *Code -- Run line(s)*) spustí aktuální řádek nebo označený kód,
+- *Ctrl+Alt+R*, (ikona *Code -- Run region -- Run all*) spustí celý skript,
+- *Ctrl+Shift+S* (ikona *Source*, *Code -- Source*) spustí celý skript pomocí funkce `source`,
+- ...a další.
+
+
+> Jaký je v RStudiu rozdíl mezi obyčejným spuštěním a spuštěním pomocí `source`?
+
+<hr>
+
+### Nastavení pracovního adresáře
+
+Při načítání souborů do Rka je dobré znát aktuální pracovní adresář (*working directory*). Vzhledem k tomuto adresáři se pak udává relativní cesta k souborům (je také možné, ale méně pohodlné zadávat cestu absolutní).
+
+V RStudiu lze pracovní adresář nastavit tak, že ve správci souborů (pravé dolní okno, záložka *Files*) vstoupíme do požadovaného adresáře a zvolíme ikonu *More -- Set As Working Directory*. Tím jsme vykonali funkci
+
+```{r, eval=FALSE}
+setwd("cesta-k-nejakemu-adresari")
+```
+
+> Nastavte pracovní adresář do nějaké složky, např. flash disk.
+
+> Řetězec znaků se zadává jako v~tomto případě v~uvozovkách. Je možné místo uvozovek použít apostrofy?
+
+Pro zjištění aktuálního pracovního adresáře slouží funkce `getwd()` (tato funkce nemá žádné argumenty). Po opětovném spuštění programu je potřeba pracovní adresář nastavit znovu.
+
+<hr>
+
+## Vektory
+
+### Konstrukce vektorů a operace s vektory
+
+Hlavní síla Rka spočívá v možnosti pracovat s vektory (a maticemi a poli). Vektorem myslíme uspořádanou n-tici prvků, např. vektor $x$ o délce 4 může být definován jako $x = (1, 2, 5, 10)$. Vektor se vytváří funkcí `c()`, například 
+
+
+```{r}
+c(1, 2, 5, 10)
+```
+
+nebo
+
+```{r}
+c('Standa','Adam','Petr')
+```
+
+Pro souvislou řadu celých čísel lze použít dvojtečku (například `3:10`). Složitější číselné posloupnosti je možné vytvářet pomocí funkce `seq()`:
+
+```{r}
+seq(from = 1, to = 5)
+```
+
+> Zjistěte jaké má funkce `seq` argumenty.
+
+> Zjistěte k čemu slouží argumenty `by` a `length.out`.
+
+Vektory je možno opakovat pomocí funkce `rep()`.
+
+
+> Pomocí funkce `seq()` vytvořte vektor (0, .2, .4) a z něj pomocí funkce `rep()` vektor (0, 0, .2, .2, .4, .4). Výsledek uložte do proměnné (např. `vys`).
+
+
+```{r}
+a = c(0, .2, .4)
+vys = rep(a, each = 2)
+vys
+```
+
+Proměnná `vys` je vektor. V~RStudiu je v okně *Workspace* u této proměnné uveden datový typ (`numeric`) a délka, po klepnutí na tento údaj se zobrazí okno s hodnotami vektoru. S vektory je možné provádět stejné operace jako s čísly. Tedy např. 
+
+```{r}
+y=vys*2
+y
+vys/y
+```
+
+V Rku je možné v rámci vektoru či proměnné indikovat chybějící hodnoty (tj. například chybějící měření z daného dne) pomocí konstanty `NA`. Tedy např. s vektorem `x = c(1, NA, 5:10)` můžeme standardně počítat (např. `x*2`). 
+
+K prvkům vektoru se přistupuje pomocí hranatých závorek: `y[3]` vrátí třetí prvek vektoru (prvek s indexem 3) -- indexování v Rku totiž začíná číslem 1 (v jiných programovacích jazycích tomu může být jinak). Dalšími možnostmi indexování se budeme ještě zabývat.
+
+> Vypište najednou první tři a pátý prvek vektoru `y`.
+
+Zvláštním případem indexování je, když v indexu použijeme záporné číslo. Potom se vrátí všechny prvky vektoru kromě těch, které byly jako záporné číslo uvedeny.
+
+> Vypište vektor `y` bez první a poslední hodnoty.
+
+<hr>
+
+### Datum
+
+Datum v Rku (proměnná typu `Date`) se ve výchozím nastavení zobrazuje ve formátu *YYYY-MM-DD*. Vytvoříme ho například jako
+
+```{r}
+d = as.Date("2012-09-29")
+```
+
+Sekvence (vektory) datumů lze v Rku vytvářet pomocí funkce `seq(from, to, by)`, kde `from` a `to` jsou datumy a `by` je časový krok (`'day'`, `'week'`, `'month'`, `'year'`).
+
+> Pomocí sekvence datumů zjistěte, kolik dní/týdnů uplynulo od vašeho narození. Délku vektoru zjistíte pomocí funkce `length()`.
+
+Datum je možno formátovat pomocí příkazu `format()` (který vrací textový řetězec): 
+
+```{r}
+d
+format(d, '%Y')
+format(d, '%m')
+format(d, '%d')
+```
+
+více viz `?format.POSIXlt`. 
+
+Formátovací znaky je možno kombinovat:
+
+```{r}
+format(d, '%Y-%m')
+format(d, '%y/%m/%d')
+```
+
+> Zformátujte datum do tvaru DD.MM.YYYY.
+
+<hr>
+
+### Logické vektory
+
+Logická proměnná (typ `logical`) může nabývat pouze dvou hodnot: pravda (`TRUE`) a nepravda (`FALSE`). Logické proměnné jsou vraceny z vyhodnocování výrazů, například:
+
+```{r}
+65 < 24
+yyy = 24 == 24
+yyy
+```
+
+Dvojité rovnítko `==` není překlep, jde o operátor porovnávání (podobně jako `>`, `<`), který není zaměnitelný s operátorem přiřazení (jednoduché rovnítko `=`). Existuje i operátor `!=`, tj. "není rovno". Logické vektory je možné jednoduše vytvořit pomocí operátorů porovnání `<`, `>`, `==`, `>=`, `<=` a `\%in\%`. Porovnávám-li víceprvkový vektor s jednoprvkovým, probíhá porovnávání s každým prvkem víceprvkového vektoru, tj.
+
+```{r}
+1:10 < 5
+```
+
+
+V případě dvou víceprvkových vektorů probíhá porovnání po prvcích, případně je kratší z vektorů opakován. Pokud není délka delšího vektoru násobkem délky vektoru kratšího, vypíše se varování.
+
+```{r}
+1:10 < 14:5
+1:6 < c(7, 5)
+1:5 < c(7, 5)
+```
+
+Vygenerujme např. řadu 100 čísel ze standardního normálního rozdělení a řadu vykresleme indexovým grafem (znak `#` uvozuje komentář, cokoliv je za ním, je Rkem ignorováno),
+
+```{r, fig.cap="Graf zobrazující 100 náhodných čísel.", cache=TRUE}
+x = rnorm(100)
+plot(x, type='l') # 'l' jako v 'line', nikoliv číslo 1.
+```
+
+pak například `x > 0` vrátí logický vektor ukazující, pro která `x` platí, že `x>0`. Použijeme-li tento vektor jako index, dostaneme všechny hodnoty splňující zvolenou podmínku:
+
+```{r}
+x[x>0]
+```
+
+Logické proměnné/vektory mohou figurovat i v přiřazení, tedy `x[x > 0] = 0` dosadí nulu za všechna čísla vyšší než 0, podobně `x[x > 0] = 1/x[x > 0]` dosadí za všechna kladná `x` jejich převrácenou hodnotu. 
+Pokud chceme z logického vektoru získat vektor indexů prvků splňujících podmínku, docílíme toho pomocí funkce `which`, např. tedy `which(x >= 0.1)`.
+
+Podmínky lze kombinovat s využitím logických operátorů:
+
+<!-- \begin{minipage}{\textwidth} -->
+<!-- \captionof{table}{Logické operátory.} -->
+
+operátor      | význam
+------------- | ---------------------------------------------------------------
+ `&`          | logický součin, obě podmínky musí platit zároveň, aby byl výsledek pravda
+  `|`         | logický součet, musí platit jedna z~podmínek 
+  `!`         | negace, vrátí se pravda, pokud je výraz nepravda 
+
+
+<!-- \begin{tabular}{|ll|} -->
+<!-- \hline -->
+<!-- \rowcolor{fzpLL} operátor & význam \\ -->
+<!-- \hline -->
+<!--   \R{\&} & logický součin, obě podmínky musí platit zároveň, aby byl výsledek pravda\\ -->
+<!--   \R{|} & logický součet, musí platit jedna z~podmínek \\ -->
+<!--   \R{!} & negace, vrátí se pravda, pokud je výraz nepravda \\ -->
+<!-- \hline -->
+<!-- \end{tabular} -->
+<!-- \bigskip -->
+<!-- \end{minipage} -->
+
+Operátory `\&` a `|` jsou binární (vkládají se mezi dva výrazy), `!` je unární (vkládá se před výraz). Srovnej:
+
+```{r}
+x = rnorm(10)
+x
+# není menší než 0
+!(x < 0)
+# větší než 0 a menší než 1
+x > 0 & x < 1
+# které prvky splňují podmínku?
+which(x > 0 & x < 1)
+# a kolik jich je?
+length(which(x > 0 & x < 1))
+```
+
+> Vypište všechny hodnoty vektoru `x`, které jsou větší než -1, a zároveň jsou menší než 1.
+
+> Vygenerujte 100 hodnot ze standardního normálního rozdělení, záporná čísla nahraďte výrazem `NA` a vykreslete.
+
+Logické vektory lze sumarizovat pomocí výrazů `all` - pro všechny prvky, `any` - pro aspoň jeden z prvků, např.
+
+```{r}
+# jsou všechna x větší než nula?
+all(x>0)
+# jsou nějaká x větší než nula?
+any(x>0)
+```
+
+<hr>
+
+### Indexování
+
+V Rku je možné přistupovat k jednotlivým prvkům vektoru různými způsoby:
+
+- číselnými indexy - např. `x[5]` nebo `x[5:10]`. V hranatých závorkách může být i proměnná nebo přímo výstup funkce - např. `x[seq(1, 10, by = 2)]` 
+- pomocí logických vektorů - např. `x[x > 0]`
+- pomocí názvů
+
+Vektor je možné pojmenovat pomocí funkce `names()`, tedy např. 
+
+```{r}
+a=c(5,3)
+names(a) = c('jan','olin')
+a
+```
+
+Pomocí `a['jan']` přitupujeme k jednotlivým položkám. 
+
+<hr>
+
+## Matice a pole
+
+Matice jsou dvourozměrná číselná pole. Vytvořit je můžeme např. pomocí funkcí `matrix` - vytvoř matici z vektoru, `rbind` - spoj řádky nebo `cbind` - spoj sloupce. Rozměry (dimenzi) matice zjišťujeme příkazem `dim`, příkaz `length` vrací celkový počet prvků.
+
+```{r}
+a = matrix(1:9, nrow=3)
+a
+b = matrix(1:9/10, nrow=3, byrow=TRUE, dimnames=list(radek=c('a','b','c'), sloupec = 1:3))
+b
+x = rnorm(5)
+y = rnorm(5)
+X = cbind(x, y)
+X
+dim(X)
+Y = rbind(x, y)
+Y
+dim(Y)
+```
+
+K jednotlivým dimenzím přistupujeme stejně jako k vektorům, dimenze jsou odděleny čárkou. Srov.
+
+```{r}
+X[1:2] 
+# X[1:2] odpovídá zápisu c(X)[1:2] - tj. matice je nejprve převedena po sloupcích na vektor
+
+X[1:2, ]
+# vynecháme-li index některé z dimenzí, vrací výraz pro tuto dimenzi všechny prvky - v tomto případě všechny sloupce
+
+X[3, ]
+X[, 'y']
+b['a',]
+```
+
+Všimněte si, že Rko v případě použití `rbind` a `cbind` samo pojmenovalo první dimenzi matice a názvy je možno použít pro indexování. 
+
+> Vytvořte matici náhodných čísel `X`, která bude mít 3 řádky a 10 sloupců. 
+
+> Vyberte 1. sloupec, 5. sloupec, 5. až 8. sloupec matice `X`.
+
+> Vyberte 1. řádek, první dva řádky matice `X`.
+
+<hr>
+
+### Pole
+
+Vícerozměrná pole je možno vytvářet pomocí příkazu `array` analogicky jako matice. Tento příkaz má argumenty `x` - data tvořící pole (často `NA`, pokud tvoříme prázdné pole, které poté plníme výsledky), `dim` - dimenze pole a `dimnames` - názvy dimenzí. Tedy např.
+
+```{r}
+a = array(NA, dim = c(2, 2, 2), dimnames = list(D1 = c('a','b'), D2 = c('x','y'), D3 = c('0','1')))
+a
+```
+
+<hr>
+
+### Operace s maticemi a poli
+
+Operátory `+`, `-`, `*`, `/` fungují v případě matic a polí po prvcích. Lze je navíc použít i v případě operací mezi maticí (polem) a vektorem nebo maticí (polem) a číslem, tedy např. 
+
+```{r}
+a = matrix(1, nrow=3, ncol=3)
+b = matrix(1:9, ncol=3)
+a+b
+d = 1:3
+a+d
+a+1
+```
+
+Ke kombinací matic (polí) a vektorů je potřeba přistupovat obezřetně, jelikož Rko jednak vektory, je-li potřeba, opakuje (recykluje) a jednak postupuje po sloupcích. To nemusí být vždy zcela vhodné.
+
+Pro matice existuje sada speciálních funkcí, např.:
+
+funkce        |        význam
+------------- | ------------------------------------------------------
+	`%*%`       | maticové násobení 
+	`solve`     | inverze matice 
+	`diag`      | přístup k diagonálním prvkům 
+	`t`         | transpozice matice 
+	`upper.tri` | vrací logickou matici s `TRUE` nad hlavní diagonálou
+	`lower.tri` | vrací logickou matici s `TRUE` pod hlavní diagonálou 
+	`eigen`     |  odhad vlastních čísel a vektorů 
+
+
+<hr>
+
+## Faktory a tabulky četnosti
+
+Faktor je (zpravidla) vektorový objekt, určující diskrétní klasifikaci jiného stejně dlouhého vektoru. Často jde o označení příslušnosti k určité třídě dat (např. pohlaví, měsíc v roce). 
+
+Rko umožňuje provádět řadu operací pomocí faktorů, např. počítat skupinové průměry (obecně jakékoliv charakteristiky), vykreslovat data dle příslušnosti k jednotlivým skupinám apod. Faktor se tvoří funkcí `factor`, např. `fct = factor(c("muž", "žena", "žena", "muž", "žena"))`. Součástí faktoru jsou možné úrovně `levels`. Srovnej
+
+```{r}
+fct = factor(c("muž", "žena", "žena", "muž", "žena"))
+fct
+levels(fct)
+levels(fct) = c('X','Y')
+fct
+```
+
+Pro další ilustraci vygenerujeme data z gama rozdělení a budeme je pokládat např. za roční měření srážek.
+
+```{r}
+dtm = seq(as.Date('2013-01-01'), as.Date('2013-12-31'), by = 'day')
+rain = 6 * rgamma(365, shape=.3)
+rain[rain<.05] = 0 # nastavíme malé srážky = 0
+plot(rain, type='h')
+sum(rain)
+```
+
+Faktory se často vytváří pomocí podmínek (např. `rain==0`). Vektor `rain==0` má stejnou délku jako vektor `rain` a rozděluje jednotlivé prvky na ty, pro které platí že nepršelo, tj. `rain==0` a ty pro které platí, že pršelo, tj. `rain!=0`.
+
+Rko umožňuje pohodlnou tvorbu tabulek četnosti. Například můžeme rychle sumarizovat, kolik dní pršelo a kolik ne:
+
+```{r}
+table(rain==0)
+```
+
+Pokud chceme data dále zkoumat, je možné psát
+
+```{r}
+# kolik srážek je vyšších než 10 mm?
+table(rain>10) 
+# kolik je to procent dní?
+table(rain>0)/length(rain)*100 
+
+```
+
+
+Dalším možným způsobem tvorby faktorů je diskretizace spojitých proměnných pomocí funkce `cut`. Ta probíhá tak, že na nějakém spojitém intervalu definujeme kategorie (zpravidla malý počet) a vyhodnocujeme, kolik prvků náleží do jednotlivých kategorií. Kategorie lze pomocí funkce `cut` definovat dvěma způsoby:
+
+```{r}
+# počet tříd
+kategorie = cut(rain, breaks = 5) 
+table(kategorie)
+
+# přesně zadané hranice intervalů
+kategorie = cut(rain, breaks = c(0, 2, 5, 10, 50)) 
+table(kategorie)
+```
+
+> Proč se vyskytují v zápisu závorky dvojího typu - tj. `[`, `(` ?
+
+Faktory je možné v rámci příkazu `table` kombinovat - tj. vytvářet kontingenční tabulky. Např.
+
+```{r}
+kategorie = rain == 0
+table(kategorie, format(dtm, '%m'))
+```
+
+Tabulky je možno zobrazit pomocí příkazu `barplot`. Tedy např.
+
+```{r, echo=c(-1, -2)}
+par(mfrow=c(1, 4))
+par(mar = c(2, 2, .5, .5))
+kategorie = rain == 0
+
+# a)
+tab = table(kategorie)
+barplot(tab, main='a)')
+
+# b)
+tab = table(kategorie, format(dtm, '%m'))
+barplot(tab, beside=FALSE, main='b)')
+
+# c)
+barplot(tab, beside=TRUE, main='c)')
+
+# d)
+kategorie = cut(rain, breaks = c(0, 2, 5, 10, 50)) 
+tab = table(kategorie, format(dtm, '%m'))
+barplot(tab, beside=TRUE, main='d)')
+```
+<p class="caption"> Vizualizace tabulek. </p>
+
+Kontingenční tabulky (tj. tabulky vztahů více proměnných) je možno zobrazit pomocí funkce `mosaicplot`. 
+
+```{r, echo=c(-1, -2)}
+par(mfrow=c(1, 2))
+par(mar = c(2, 2, .5, .5), ps=9)
+kategorie = cut(rain, breaks = c(0, 2, 5, 10, 50)) 
+mosaicplot(format(dtm, '%m')~kategorie, main = '', xlab = 'měsíc', las = 1)
+mosaicplot(kategorie~ format(dtm, '%m'), main = '', ylab = 'měsíc')
+```
+
+<p class="caption"> Vizualizace kontingenčních tabulek. </p>
+
+V grafu vlevo udává výška jednotlivých obdelníků počet událostí spadajících do jednotlivých kategorií. Šířka obdélníků odpovídá počtu událostí v jednotlivých měsících. Symbol `---` vyjadřuje, že pro danou kombinaci proměnných nejsou žádné výskyty. Pro graf vpravo udává šířka obdelníků počet událostí v jednotlivých kategoriích, výška jednotlivých obdélníků odpovídá poměru zastoupení jednotlivých kategorií proměnné `rain` v jednotlivých měsících.
+
+<hr>
+
+## data.frame
+
+Data.frame je zpravidla dvourozměrný objekt, zjednodušeně sada stejně dlouhých vektorů, které mohou být různého typu. Tvorba probíhá často pomocí příkazu `data.frame`, např. vytvořme fiktivní data o ranním jídelníčku smyšlené osoby:
+
+```{r}
+den = rep(c('pondělí','úterý','středa', 'čtvrtek', 'pátek'), length=50)
+snidane = sample(c('jogurt','banán','jablko'), length(den), replace=TRUE)
+D = data.frame(DEN = den, JIDLO = snidane)
+```
+
+Data.frame je asi nejtypičtější datovou třídou používanou pro environmentální data. Data frame můžeme vypsat, případně přehledněji zobrazit pomocí `str(D)` (struktura objektu) -- za znaky dolaru `$` uvidíme názvy jednotlivých vektorů (`DEN`, `JIDLO` atd.), jejich typ a několik počátečních hodnot. V případě rozsáhlejších data.framů (obecně jakýchkoliv objektů) je možno zobrazit pouze začátek pomocí funkce `head`, případně konec pomocí funkce `tail`.
+
+Indexovat sloupce (proměnné) můžeme několika způsoby: pomocí číselných indexů podobně jako matice nebo pomocí názvů - srov.
+
+```{r}
+D[, 1]
+D[, 'DEN']
+D$DEN
+```
+
+Ke sloupcům lze přistupovat také pomocí jejich názvů a operátoru `$`, například `D$DEN`. Ekvivalentně je možno k sloupcům přistupovat pomocí dvojité hranaté závorky, tedy `D[[1]]` nebo `D[['DEN']]`. Sloupce lze odstranit z data framu pomocí `D[[1]] = NULL`. Jména sloupců (veličin) lze změnit pomocí funkce `names`. Jména řádků lze nastavit pomocí funkce `rownames`.
+
+Srovnej
+
+```{r}
+names(D)
+names(D)[2] = 'POKRM'
+names(D)
+D$X = 1
+head(D)
+D$X = NULL
+head(D)
+```
+
+Řádky můžeme vybírat opět číselným indexem, názvem (pokud existuje) nebo pomocí logických vektorů. Tedy
+
+```{r}
+D[1:3,]
+D[D$DEN=='pondělí',]
+```
+
+> Z `data.frame D` zjistěte nejoblíbenější pondělní jídlo.
+
+> Kolikrát byl na snídani banán a kolikrát jablko? 
+
+<hr>
+
+## Typ, mód a třída objektů
+
+Objekty v Rku mají různé vlastnosti, atributy. Některé z nich mají všechny objekty. Jedná se o délku (zjišťujeme funkcí `length`), typ, mód a třídy. Objekty z hlediska interpretace Rkem mohou mít několik typů a módů. Význam obou termínů je podobný, přičemž mód objektu je obecnější. Mód objektu (zjišťujeme funkcí `storage.mode` případně `mode`, přičemž výstupy obou funkcí se mohou v některých případech lišit) v podstatě říká, jak je objekt uložen v paměti. Mezi základní módy objektů patří 
+
+mod           | detail
+------------- | --------------------------
+`logical`     | logická proměnná  
+`integer`     | celé číslo 
+`double`      | reálné číslo
+`complex`     | komplexní číslo 
+`character`   | znakový řetězec
+`raw`         | bitová reprezentace objektů 
+`list`        | seznam různých objektů 
+`NULL`        | pro neexistující objekty
+`function`    | funkce 
+`expression`  | výraz 
+`environment` | prostředí (např. ve kterém se výrazy vyhodnocují) 
+
+
+
+Funkce `mode` dává v podstatě stejné výsledky s tím, že např. `storage.mode` `integer` a `double` jsou oba označeny jako `numeric`.  
+
+Typ objektu (zjišťujeme funkcí `typeof`) je v podstatě shodný se `storage.mode`m s tím, že mód `function` zahrnuje typy `closure` - obecná funkce, `builtin` - základní vestavěná funkce a `special` základní operátory (např. +, -).
+
+Nezávisle na tom, jak jsou objekty reprezentovány v počítači, mohou mít objekty různé třídy (zjišťujeme funkcí `class`). Funkce, do kterých objekty vstupují se pak mohou chovat různě podle toho, jaké třídy je objekt, který do nich vstupuje. Příkladem může být funkce `length`, zjišťující délku objektu, nebo funkce `plot`. Srov.
+
+```{r}
+a = 1:5
+b = list(1:5)
+
+class(a)
+length(a)
+
+class(b)
+length(b)
+```
+
+```{r, fig.show='hold', fig.cap="Ukázka funkce `plot` pro třídu `matrix` (nahoře) a `data.frame` (dole)"}
+b = matrix(1:6, ncol=2)
+plot(b)
+plot(D) # D je data.frame z kapitoly "data.frame"
+```
+
+Porovnání módů, typů a tříd objektů přináší následující tabulka.
+
+objekt                            | storage.mode    | mode      | typeof    | class 
+--------------------------------- | --------------- | --------- | --------- | ------------
+`1`                               | double          | numeric   | double    | numeric 
+`1L`                              | integer         | numeric   | integer   | integer 
+`1:3`                             | integer         | numeric   | integer   | integer 
+`factor("peklo")`                 | integer         | numeric   | integer   | factor 
+`matrix(1:3)`                     | integer         | numeric   | integer   | matrix 
+`matrix(1:3 - 0.5)`               | double          | numeric   | double    | matrix
+`complex(real=10,imaginary = 3)`  | complex         | complex   | complex   | complex 
+`"ahoj"`                          | character       | character | character | character 
+`sum`                             | function        | function  | builtin   | function 
+`mean`                            | function        | function  | closure   | function  
+`NULL`                            | NULL            | NULL      | NULL      | NULL 
+`Inf`                             | double          | numeric   | double    | numeric 
+`NA`                              | logical         | logical   | logical   | logical  
+`NA_integer_`                     | integer         | numeric   | integer   | integer 
+`NA_real_`                        | double          | numeric   | double    | numeric 
+`NA_character_`                   | character       | character | character | character 
+`NA_complex_`                     | complex         | complex   | complex   | complex 
+
+Pro převod mezi datovými typy slouží funkce začínající výrazem `as.` následovaným názvem třídy (případně `storage.mode`u), na který chceme převádět:
+
+```{r, error=TRUE}
+q = as.character(10)
+w = as.numeric(q)
+class(q)
+class(w)
+q * 2
+w * 2
+```
+
+
+V tomto příkladě mají proměnné `q` i `w` hodnotu 10, v prvním případě se však jedná o řetězec znaků, kdežto druhá proměnná je číslo.
+
+<hr>
+
+## Speciální hodnoty
+
+V tabulce níže jsou uvedeny některé ze speciálních hodnot, které jsou v Rku k dispozici. Máme na mysli zejména   `Inf`, `NULL`, `NA` a `NaN`. Přičemž 
+
+hodnota                         | význam
+------------------------------- | -------------------------------------------------------------------------------------------------------
+`Inf`, `-Inf`                   | reprezentují nekonečno
+`NULL`                          | je, řekněme, prázdná množina
+`NA` (*not available*)          | slouží k reprezentaci chybějících hodnot 
+`NaN` (*not a number*)          | slouží k reprezenaci výsledků operací, které nejsou definovány (např. jsou-li mimo definiční obor).
+
+
+Pro chybějící hodnoty je někdy vhodné přímo definovat typ (jinak je výchozím typem `logical`), tedy např. `NA_integer_`, `NA_double_`, `NA_character_` atd. Rko zná tyto hodnoty, aby nebylo nutné hlásit chyby (a končit kód) pro operace typu `1/0`, případně aby bylo možno pracovat i s daty obsahující chybějící hodnoty (což je obecně relativně častý případ). Příklady využívající tyto hodnoty jsou v následující ukázce
+
+```{r}
+1/0
+Inf * Inf
+Inf * 0
+```
+
+```{r}
+a = c(1, 2.3, NA, Inf, NaN)
+a*1
+a/Inf
+```
+
+```{r}
+b = NULL
+length(b)
+b*2
+```
+
+```{r}
+d = c(NULL, NULL)
+length(d)
+d
+```
+
+```{r}
+e = c(NULL, NULL, NA, 1)
+length(e)
+e
+```
+
+V Rku je možné zjišťovat různé vlastnosti objektů pomocí funkcí typu `is.x`, kde `x` je vlastnost, na kterou se dotazujeme, může to být třída objektu - např. `is.integer`, `is.character`, `is.numeric`, `is.factor` atd. nebo dotaz na speciální hodnotu, tedy `is.na`, `is.nan`, `is.finite`. Například
+
+```{r}
+is.integer(1)
+is.integer(1L)
+is.na(NA)
+is.na(NaN)
+is.nan(NA)
+is.finite(1/0)
+```
+
+<hr>
+
+## Funkce a řídicí struktury
+
+### Funkce
+
+Funkce je v Rku reprezentovaná jako proměnná typu `function`. Vytváří se pomocí funkce `function`, jejímž argumentem je výpis argumentů tvořené funkce. Následuje tělo funkce, které je v případě složeného příkazu uzavřeno do složených závorek. Tedy např.
+
+```{r}
+ahoj = function()print('AHOJ!!')
+
+ahoj()
+```
+
+definuje funkci `ahoj`, která nemá žádné argumenty a jediné, co dělá, je, že vypíše AHOJ!! Chceme-li funkci rozšířit, aby např. zahrnovala jméno pozdravené osoby, píšeme
+
+
+```{r}
+ahoj = function(jmeno){
+	print('AHOJ,')
+	print(jmeno)
+	}
+ahoj('Honzo')
+```
+
+Udělali jsme v zásadě dvě úpravy - tělo funkce je uzavřeno ve složených závorkách a přidali jsme argument `jmeno`, který dále funkce vypisuje. Tento argument nemá výchozí hodnotu a při volání `ahoj()` dostaneme chybu. Výchozí hodnotu specifikujeme, definujeme-li
+
+```{r}
+ahoj = function(jmeno = 'pane'){
+	print('AHOJ,')
+	print(jmeno)
+	}
+ahoj()
+```
+
+Hodnotu, kterou funkce vrací, je možno specifikovat v těle funkce pomocí funkce `return`. Pokud není vracená hodnota specifikovaná, vrací se hodnota posledního vyhodnoceného výrazu v těle funkce, tedy
+
+```{r}
+a = ahoj()
+a
+```
+
+srovnej s 
+
+```{r}
+ahoj = function(jmeno = 'pane'){
+	return(c('AHOJ,', jmeno))
+	print('konec.')
+	}
+ahoj()
+```
+
+V rámci definice funkce je možné použít speciální argument `...`, který je posléze možné předat jiné funkci, např.
+
+```{r, fig.cap="Demonstrace funkce argumentu `...`."}
+plot_rnd = function(n, ...){
+	x = rnorm(n, 0, 1)
+	plot(x, type='l', ...)
+}
+```
+
+Funkce `plot_rnd` má argument `n`, který určuje, kolik náhodných čísel se bude generovat, argument `...` se předává funkci `plot`, tedy jakékoliv argumenty jiné než `n` jsou použity ve funkci `plot`. Např.
+
+```{r, fig.height=4}
+plot_rnd(100, col = 'red')
+```
+
+<hr>
+
+### Podmínky
+
+Při programování se často setkáváme se situací, kdy v závislosti na splnění nějaké podmínky chceme vykonat ten či jiný výraz - např. při řešení kvadratické rovnice počítáme kořeny dle hodnoty diskriminantu. V Rku využijeme pro tyto účely strukturu 
+
+```{r, eval=FALSE}
+if (podmínka) výraz1 else výraz2
+```
+
+kdy pokud je splněna `podmínka` provede se `výraz1` pokud ne, provede se `výraz2`, přičemž část od klíčového slova `else` je nepovinná. Výrazy mohou být značně rozsáhlé, např. mohou obsahovat další podmínky apod.
+
+
+> Vypište, zdali je suma 100 náhodných čísel kladná nebo záporná.
+
+```{r}
+x = rnorm(100)
+sum(x)
+if (sum(x) > 0) ('kladne') else ('zaporne')
+```
+
+> Vypište, zdali jsou vsechna x vetsi nez -2?
+
+```{r}
+if (all(x > -2)) {znam = 'vse > -2'} else {znam = 'nejake < -2'}
+znam
+```
+
+> Vypište, zdali je nejake x vetsi nez 3?
+
+```{r}
+if (any(x > 3)) {znam = 'vse < 3'} else {znam = 'nejake > 3'}
+znam
+```
+
+Podmínkou v příkazu `if` nemůže být vektor, respektive z vektoru je uvažován pouze první prvek. Pokud z nějakého důvodu potřebujeme podmínku aplikovat na jednotlivé prvky vektoru, je možné použít příkaz `ifelse`. Příkladem může být překódování číselného vektoru na vektor znakový (+, -) podle toho, je-li položka větší nebo menší než 0:
+
+```{r}
+ifelse(rnorm(10)>0, '+', '-') 
+```
+
+<hr>
+
+### Cyklus for
+
+Další velmi obvyklou situací je, že potřebujeme nějaký blok kódu opakovat, např. pro každý prvek z nějakého vektoru nebo $n$krát apod. K tomu slouží struktura 
+
+```{r, eval=FALSE}
+for (i in v) {
+	vyraz
+}
+```
+
+tj. pro `i` nabývající hodnot z vektoru `v` prováděj `vyraz`. Proměnná `i` často figuruje v prováděném výrazu. Nejjednodušším příkladem může být vypsání čísel od 1 do 3
+
+```{r}
+for (i in 1:3){
+	print(i)
+}
+```
+
+nebo výpis informací o souborech v aktuálním adresáři změněných během posledního dne
+
+```{r}
+soubory = dir(pattern='html')
+for (f in soubory){
+	if (file.info(f)$mtime>=(Sys.time() - 3600*24)) cat(f, file.info(f)$size, '\n')
+  }
+```
+
+<hr>
+
+## Základní grafika
+
+Na začátku kapitol jsme vykreslili graf pomocí funkce `plot`, jejímž jediným parametrem byl vektor srážek (`rain`) -- v tom případě hodnoty na ose x představují pořadí (index) v rámci vektoru, hodnoty na ose y pak čísla ve vektoru obsažená. Tento typ grafu se nazývá *index plot* - indexový graf. Příkazy
+
+```{r, eval=FALSE}
+plot(rain)
+plot(y=rain)
+plot(x=1:length(rain), y=rain)
+plot(1:length(rain), rain)
+```
+
+jsou ekvivalentní. V RStudiu se graf objeví v okně *Plots*, kde je k dispozici i historie kreslených obrázků. Pokud chceme mít na ose x přímo datum vztahující se k časové řadě, je nutné předat funkci jako parametry jak datum (parametr `x`), tak srážky (parametr `y`).
+
+Funkce `plot` ve výchozím nastavení vždy smaže stávající graf a nakreslí nový. Pokud chceme v jednom obrázku znázornit více časových řad, použijeme funkci `lines`. Řada se zobrazí pomocí čáry, stejně jako při použití parametru `type = "l"` ve funkci `plot`. (K zobrazení bodů slouží analogická funkce `points`.)
+
+```{r, echo=-1, fig.cap="Ukázka tvorby grafu."}
+rain2 = 6 * rgamma(365, shape=.3)
+rain2[rain2<.05] = 0 # srážky pod 0.05 mm prohlásíme za nulové
+plot(dtm, rain, pch=20)
+lines(dtm, rain2, col='red', type='h')
+```
+
+Parametr `col` udává barvu; platné názvy barev vypíše funkce `colors`. Barvy lze zadávat také v hexadecimálním tvaru nebo jako kombinace barevných složek. Kromě barvy mohou mít grafické funkce množství dalších parametrů, které určují vzhled grafu. Nejužitečnější z nich udává následující tabulka:
+
+
+
+parametr | význam 
+-------- | ----------------------------------------------------------------------------
+  `type` | typ zobrazení (body `"p"`, čáry `"l"`, body i čáry `"b"` atd.)
+  `col`  | barva 
+  `lty`  | typ čáry (plná, čárkovaná apod.) -- číselné hodnoty od 1
+  `lwd`  | šířka čáry 
+  `pch`  | vzhled bodu (kolečko, čtverec, hvězdička apod.) -- číselné hodnoty od 1
+  `xlim` | rozsah osy x, dvouprvkový vektor se začátkem a koncem rozsahu 
+  `ylim` | rozsah osy y 
+  `xlab` | popisek osy x
+  `ylab` | popisek osy y
+  `main` | nadpis grafu  
+
+Globálně (pro všechny následující obrázky) se dají parametry změnit pomocí funkce `par`. Legenda se vytváří zvlášť funkcí `legend`:
+
+```{r, eval=FALSE}
+legend("topright", c("rain1", "rain2") , col = c("black", "red"), pch = c(20, NA), lty = c(NA, 1), title = "rain")
+```
+
+Další typy grafů jsou uvedeny průběžně v rámci následujících kapitol. Mimo typů grafů obsažených v základní distribuci Rka existuje velké množství balíků zprostředkovávajících funkce pro tvorbu speciálních typů grafů, map (`raster`, `rasterVis`, `RGoogleMaps`), balíky pomáhající při efektivní vizuální analýze dat (`lattice`, `grid`, `ggplot2`), případně balíky umožňující tvorbu interaktivních aplikací (`shiny`, `ggvis`, `htmlwidgets`).
+
+<hr>
+
+### Export grafu 
+
+Obrázky se v Rku vykreslují standardně na obrazovku. Pro další využití je můžeme v RStudiu uložit jako soubor příkazy z okna *Plots*: *Export -- Save Plot as Image* nebo *Export -- Save Plot as PDF*. Pohodlnější je však ukládat obrázky přímo v Rku za pomoci příslušných funkcí. Například graf v souboru s rastrovým obrázkem typu PNG vytvoříme jako
+
+```{r, eval=FALSE}
+png("graf1.png", width = 800, height = 600)
+# ...
+# kód vytvářející graf
+# ...
+dev.off()
+```
+
+Funkce `dev.off` uzavírá výstup na určité výstupní zařízení (`device`) -- v tomto případě výstup do souboru, který se otevřel vykonáním funkce `png`. (Díky systému výstupních zařízení je možné například průběžně přidávat prvky do obrázků v různých souborech.) Vlastnosti exportovaného obrázku lze dále upravit parametry `res` (rozlišení v DPI - dots per inch) a `pointsize` (velikost tiskového bodu). V nápovědě k funkci `png` jsou uvedeny i funkce pro jiné formáty rastrových obrázků (JPG, TIFF apod.).
+
+Rko podporuje také vektorové formáty, například do souboru typu PDF se graf uloží jako
+
+```{r, eval=FALSE}
+pdf("graf1.pdf", width = 8, height = 6)
+# ...
+# kód vytvářející graf
+# ...
+dev.off()
+```
+
+kde `width` a `height` je v palcích.

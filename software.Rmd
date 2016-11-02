@@ -1,0 +1,42 @@
+---
+title: "Software"
+---
+
+
+```{r, include=FALSE}
+library(htmltools)
+
+item = function(title, autor, popis = ""){
+  div(
+  div(class = "fluid-row",
+    div(class = "col-sm-1"),
+    div(class = "col-sm-1", 
+      div(
+        
+        span(class="glyphicon glyphicon-arrow-right", style="font-size:30px;vertical-align: baseline;padding-top:3px;margin:0px;line-height:1.4" ))
+    ), 
+    div(class = "col-sm-10", 
+           h4(title), 
+           h5(strong('autor:'), autor),
+           p(popis, style="padding-bottom:10px")
+          )
+  )
+  )
+}
+```
+
+
+
+```{r, echo=FALSE}
+p(style="height:30px")
+
+item('PRUSAK', autor ="Pavel Pech (pech@fzp.czu.cz)", popis = "Autorizovaný software vytvořený v rámci řešení NAZV -QH91247. Software řeší průsak zemními hrázemi – homogenními i s těsnícím  jádrem uprostřed nebo u návodního líce, s různým uspořádáním vzdušného líce hráze, včetně různých typů drénů. Zemní hráz může být umístěna na propustném podloží s nepropusnou vrstvou v konečné i „nekonečné“ hloubce. Výsledkem řešení je určení specifického prosakujícího množství q a vykreslení průběhu hladiny v zemním tělese.")
+
+hr()
+
+
+p(style="height:120px")
+```
+
+
+

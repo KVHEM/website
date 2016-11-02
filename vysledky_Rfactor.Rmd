@@ -1,0 +1,52 @@
+---
+title: "Rfactor"
+output: html_document
+runtime: shiny
+---
+
+```{r, echo=FALSE, message=FALSE}
+library(shiny)
+library(raster)
+r = readRDS('data/R_gls_wgs.rds')
+```
+
+Výsledek projektu ... 
+
+
+```{r, echo = FALSE}
+
+apka = function(){
+
+ui <- fluidPage(
+  plotOutput("mapa",
+    click = "plot_click",
+    hover = hoverOpts(id = "plot_hover", delayType = 'throttle', delay = 50) 
+  ),
+  verbatimTextOutput("info")
+)
+
+server <- function(input, output) {
+  output$mapa <- renderPlot({
+    plot(r)
+  })
+
+  output$info <- renderText({
+    xy_extract = function(e){
+      if(is.null(e)) return("NULL\n")
+      er = extract(r, SpatialPoints(list(x = e$x, y = e$y )))
+      paste0('x=', format(e$x, width = 5, digits =4, justify = 'left'), ', y=', format(e$y, width = 5, digits =4, justify = 'left'), ', R=', round(er/10, 2), '\n')
+    }
+
+    paste0(
+      "INFO: ", xy_extract(input$plot_hover)
+    )
+  })
+}
+
+shinyApp(ui, server)
+}
+```
+
+```{r, echo = FALSE}
+apka()
+```

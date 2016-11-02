@@ -1,0 +1,32 @@
+---
+title: "Výsledky"
+---
+
+```{r, include=FALSE}
+library(htmltools)
+thumbnail <- function(title, img, href, popis = "") {
+  div(
+  div(class = "col-sm-4",
+      a(class = "thumbnail", title = title, href = href,
+        img(src = img, style = "height:100px")
+      )
+  ),
+  div(class = "col-sm-8", 
+    h4(title),
+    p(popis)
+  )
+  )
+}
+```
+
+
+```{r, echo=FALSE}
+p(style="height:10px")
+
+thumbnail('R faktor', img = 'images/Rfactor.png', href = "vysledky_Rfactor.html", popis = "Mapa R faktoru odvozená pro období 1989-2003. Vznikla jako výsledek projektu 'Erozní smyv – zvýšené riziko ohrožení obyvatel a jakosti vody v souvislosti s očekávanou změnou klimatu' financovaného Ministersvem vnitra.")
+
+p(style="height:120px")
+```
+
+
+

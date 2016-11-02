@@ -1,0 +1,231 @@
+@font-face {
+  font-family: "Etelka";
+  src: url("Etelka-Text-Pro_16187.ttf");
+}
+
+html { 
+  overflow-y: scroll; 
+}
+
+blockquote {
+  font-style: italic
+}
+
+.navbar-default {
+  background-color: #9999;
+  border-color: #9999;
+}
+
+.navbar{
+  margin-bottom: 0px!important;
+}
+
+body {
+  font-family: "Etelka"; /*,Helvetica Neue,Helvetica,Arial,sans-serif;*/
+  color: #333;
+  background-color: white!important;
+  
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus  {
+  color: white!important;
+  background-color: #025f6c!important;
+  text-decoration: underline;
+}
+
+.navbar-default .navbar-nav>li>a {
+color: white;
+}
+
+h1.title {
+font-size: 38px;
+margin-top: 30px!important;}
+
+a {
+  color: #333!important;}
+
+.navbar-default a:hover, .navbar-default a:focus {
+  color: white!important;
+  background-color: #1a91a1!important;
+  text-decoration: underline!important;
+}
+
+.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
+  color: #025f6c!important;
+  background-color: white!important;
+  text-decoration: none!important;
+  font-weight: 800;}
+
+.navbar-brand{
+  padding-left: 0px!important;
+}
+
+.navbar {
+  position: relative;
+  min-height: 40px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid #025f6c;
+}
+
+.futr {
+  margin-top: 30px;
+  padding: 15px!important;
+  color:white!important;
+  font-size:8pt;
+  background-color: #025f6c;
+}
+
+a:focus {
+  outline: thin dotted;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+a:hover, a:focus {
+  text-decoration: underline;
+}
+
+a {
+  color: #025f6c!important;
+}
+
+blockquote {
+  font-size: 10pt;
+  color: #025f6c!important;
+  border-left: 2px solid #1a91a1; 
+  padding: 4px 4px;
+  margin: 0 0 10px;
+  background-color: #fafafa;
+}
+
+h1, .h1, h2, .h2, h3, .h3 {
+ /* margin-top: 0px!important;
+  margin-bottom: 0px; */
+  
+  color: black;
+  font-weight: 400;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: "Etelka";
+}
+
+a.thumbnail:hover, a.thumbnail:focus, a.thumbnail.active {
+  border-color: #1a91a1;
+  text-decoration: none;
+}
+
+.thumbnail {
+  display: block;
+  margin-bottom: 0px!important;
+  line-height: 1.42857143;
+  text-align: center;
+  background-color: white;
+}
+
+.polozka {
+  font-weight:900!important;
+  font-size:15pt;
+}
+
+.subtitle {
+  font-size: 11pt;
+  font-style:normal;
+  text-decoration: underline!important;
+  font-weight:800;
+}
+
+em {
+  color: black;
+  font-style:normal;
+  text-decoration: underline!important;
+}
+
+hr {
+  display: block;
+  -webkit-margin-before: 0.5em;
+  -webkit-margin-after: 0.5em;
+  -webkit-margin-start: auto;
+  -webkit-margin-end: auto;
+  border-style: inset;
+  border-width: 10px;
+  margin-top: 18px;
+margin-bottom: 18px;
+border: 0;
+border-top: 1px dotted #1a91a1;
+}
+
+.shiny-frame{
+  height: 500px;
+}
+
+.caption{
+ font-weight:800;
+ padding-left:50px;
+ padding-bottom:20px;
+ padding-top:20px;
+}
+
+
+a.back-to-top {
+	display: none;
+	width: 70px;
+	height: 70px;
+	position: fixed;
+	z-index: 999;
+	right: 20px;
+	bottom: 20px;
+	font-size:48px;
+	text-align: center;	
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	color: #fff!important;
+	background-color: #555;
+  padding: 5px;
+  opacity: .6;
+  /*transition: opacity .5s ease;*/
+	
+}
+
+a.back-to-top:hover{
+  opacity: 1;
+}
+
+
+#TOC {
+  background-color:#1a91a1;
+  color: #fff!important;
+  display:inline-block;
+/*  text-align:center;*/
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+
+#TOC > ul {
+    list-style-type: none;
+   /* overflow: hidden; */
+    margin: 0;
+    padding: 0;
+} 
+
+#TOC > ul > li {
+  
+  /*float: left!important;*/
+  margin:20 auto;
+  
+}
+
+#TOC > ul > li a {
+    display: block;
+    color: white!important;
+    /*text-align: center;*/
+    padding: 4px 4px;
+    text-decoration: none;
+    
+}
+
+#TOC > ul > li a:hover {
+    background-color: #025f6c;
+    color: white!important;
+}

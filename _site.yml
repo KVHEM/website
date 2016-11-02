@@ -1,0 +1,24 @@
+name: "my-website"
+navbar:
+  title: "KVHEM::resources"
+  left:
+    - text: "Úvod"
+      href: index.html
+    - text: "R manuály"
+      href: Rmanual.html
+      name: manual
+    - text: "Výukové materiály"
+      href: materialy.html
+    - text: "Software"
+      href: software.html
+    - text: "Výsledky výzkumu"   
+      href: vysledky.html
+output:
+  html_document:
+    theme: simplex
+    highlight: pygments
+    include:
+      in_header: logo.html
+      before_body: logo2.html
+      after_body: footer.html
+    css: styles.css
