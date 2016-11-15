@@ -1,0 +1,426 @@
+{\rtf1\ansi\deff0{\fonttbl{\f0\fnil\fcharset0 Courier New;}}
+{\*\generator Msftedit 5.41.21.2509;}\viewkind4\uc1\pard\lang1033\f0\fs22 5 COLOR (9), (15)\par
+7 CLS\par
+10 REM\par
+20 REM\par
+30 REM\par
+40 REM\par
+50 REM      ...... Program ETO II ......\par
+60 REM         (Pan evaporation method)\par
+70 REM\par
+80 REM\par
+90 REM\par
+100 OPTION BASE 1: DEFINT I-K, M-N: DEFDBL A-H, O-Z\par
+110 DEF FNLOG10 (X) = LOG(X) / LOG(10)\par
+120 DIM RKP(20, 20, 20), RPAR(25), REC(10, 10, 15), CF1(15)\par
+130 DIM MON$(15), DPAN$(15), DWIND$(10), DRHM$(5), VL$(10), CHVAL$(50)\par
+140 KEY OFF: GOSUB 2820:  GOSUB 510: GOSUB 580\par
+150 IF IP = 3 THEN GOSUB 1710\par
+160 IF RHM < 40 THEN LET IRHM = 1\par
+170 IF RHM >= 40 AND RHM <= 70 THEN LET IRHM = 2\par
+180 IF RHM > 70 THEN LET IRHM = 3\par
+190 IF WIND < 175 THEN LET IW = 1\par
+200 LET IWW = IW\par
+210 IF WIND >= 175 AND WIND <= 425 THEN LET IW = 5\par
+220 IF WIND >= 175 AND WIND <= 425 THEN LET IWW = 2\par
+230 IF WIND > 425 AND WIND <= 700 THEN LET IW = 9\par
+240 IF WIND > 425 AND WIND <= 700 THEN LET IWW = 3\par
+250 IF WIND > 700 THEN LET IW = 13\par
+260 IF WIND > 700 THEN LET IWW = 4\par
+270 IF IP = 1 AND IPL = 1 THEN LET K1 = 1\par
+280 IF IP = 1 AND IPL = 2 THEN LET K1 = 3\par
+290 IF (IP = 2 OR IP = 3) AND IPL = 1 THEN LET K1 = 2\par
+300 IF (IP = 2 OR IP = 3) AND IPL = 2 THEN LET K1 = 4\par
+310 IF WSD >= 1000 THEN LET WSD = 999\par
+320 LET IP1 = FIX(LOG10(WSD) / LOG(10)) + IW\par
+330 LET IP2 = IP1 + 1\par
+340 LET FP = LOG10(WSD) - FIX(LOG10(WSD))\par
+350 LET COEF = RKP(IP1, IRHM, K1) - (RPK(IP1, IRHM, K1) - RKP(IP2, IRHM, K1)) * FP\par
+360 IF IP <= 2 THEN 390\par
+370 LET ETO = CF * COEF * CESP\par
+380 GOTO 400\par
+390 LET ETO = CF * COEF * EPAN\par
+400 CLS : LOCATE 10, 10\par
+410 PRINT " IF YOU WISH TO PRINT RESULTS :"\par
+420 LOCATE 14, 18\par
+430 PRINT "- ON A LINE PRINTER....PRESSS (1) AND (ENTER) "\par
+440 LOCATE 16, 18\par
+450 INPUT ; "- ON A DISPLAY........PRESS (2) AND (ENTER)  ", IIPP\par
+460 IF IIPP = 1 THEN 470 ELSE 490\par
+470 GOSUB 2390\par
+480 GOTO 3940\par
+490 GOSUB 2040\par
+500 GOTO 3970\par
+510 CLS : LOCATE 8, 26: PRINT "*************************": LOCATE 9, 26: PRINT "*"\par
+520 LOCATE 9, 50: PRINT "*": LOCATE 10, 26: PRINT "*": LOCATE 10, 31\par
+522 LOCATE 10, 50: PRINT "*": LOCATE 11, 50: PRINT "*"\par
+525 LOCATE 11, 26: PRINT "*"\par
+530 LOCATE 10, 30: PRINT " PROGRAM ETO II"\par
+533 LOCATE 12, 26: PRINT "*************************"\par
+534 LOCATE 15, 26: PRINT "Evaluation of evaporation"\par
+535 COLOR (3), (15)\par
+538 LOCATE 22, 12: PRINT "Authors: Pavel Pech, Jirka Pavlasek, Petra Kubinova"\par
+539 LOCATE 23, 10: PRINT "Department of Water Resources and Environmental Modelling"\par
+540 LOCATE 24, 10: PRINT " CULS; Faculty of Life Sciences; Kamycka 1129; 16521 Prague 6; Czech Republic"\par
+550 REM\par
+560 LOCATE 25, 1: INPUT ; " ", A$\par
+570 RETURN\par
+580 CLS : LOCATE 5, 15: PRINT "DETERMINATION ETO - PAN EVAPORATION METHOD"\par
+590 LOCATE 6, 16: PRINT STRING$(42, "*")\par
+600 LOCATE 10, 7: PRINT "REFERENCE CROP EVAPOTRANSIRATION (ETO) IS"\par
+610 LOCATE 10, 49: PRINT "OBTAINED FROM :"\par
+620 LOCATE 14, 25: PRINT "ETO = c. Kp. EPAN"\par
+630 LOCATE 17, 8: PRINT "WHERE"\par
+640 LOCATE 18, 16: PRINT " c - CORRECTION FACTOR "\par
+650 LOCATE 19, 16: PRINT " Kp - PAN COEFICIENT ": LOCATE 20, 16\par
+660 PRINT " Epan - PAN EVAPORATION IN mm/day and represents the mean "\par
+670 LOCATE 21, 24: PRINT " value of the period considered"\par
+680 LOCATE 24, 20: PRINT P2$; " To continue " + P1$ + P3$\par
+690 LOCATE 25, 1: INPUT ; " ", A$\par
+700 CLS : LOCATE 11, 23: INPUT ; " COUNTRY   :   ", COUNTRY$\par
+710 LOCATE 14, 23: INPUT ; " Place     :  ", PLACE$\par
+720 CLS : LOCATE 5, 32: PRINT "Month": LOCATE 6, 32: PRINT "----"\par
+740 FOR I = 1 TO 12\par
+745 LOCATE I + 7, 18 + 8: PRINT MON$(I) + "    ": LOCATE I + 7, 35 + 8: PRINT I\par
+746 LOCATE I + 7, 32 + 8: PRINT "..."\par
+747 NEXT I\par
+748 LOCATE 21, 10 + 8: PRINT "Select number of month and press (ENTER)"\par
+750 REM\par
+760 REM\par
+780 REM  Input basic parameters\par
+790 REM\par
+840 REM\par
+850 REM\par
+860 LOCATE 21, 59\par
+870 INPUT ; " ", MH\par
+880 CLS : LOCATE 10, 27: PRINT " Input parameters  "\par
+890 LOCATE 11, 28: PRINT "-----------------": LOCATE 15, 20\par
+900 INPUT ; " Epan - pan evaporation in mm/day  :  ", EPAN: LOCATE 17, 20\par
+910 INPUT ; " Total 24 - hr Wind Run in km/day  :  ", WIND\par
+920 CLS : LOCATE 8, 30: PRINT " Type of Pan  "\par
+930 LOCATE 9, 31: PRINT "-------------"\par
+940 CLS : LOCATE 8, 30: PRINT "Relative Humidity"\par
+950 LOCATE 9, 30: PRINT "------------------"\par
+960 LOCATE 13, 13: PRINT "RHmean is available ........press(1) and (ENTER"\par
+\par
+970 LOCATE 15, 13: INPUT ; " RHmin and RHmax are available .... press (2) and (ENTER)", ISRH\par
+980 IF ISRH = 2 THEN 1010\par
+990 CLS : LOCATE 12, 20: INPUT ; "Relative Humidity RHmean in %  : ", RHM\par
+1000 GOTO 1040\par
+1010 CLS : LOCATE 12, 22: INPUT ; "Relative Humidity RHmin in %  :  ", RHMIN\par
+1020 LOCATE 14, 22: INPUT ; "Relative Humidity RHmax in % :   ", RHMAX\par
+1030 LET RHM = (RHMIN + RHMAX) / 2!\par
+1040 CLS : LOCATE 8, 30: PRINT " Type of Pan ": LOCATE 9, 30: PRINT "------"\par
+1050 LOCATE 13, 15: PRINT "Class A Pan ...................press (1) and (ENTER)"\par
+1060 LOCATE 15, 15: PRINT " Colorado Sunken Pan........press(2) and (ENTER)"\par
+1070 LOCATE 17, 15: PRINT "any other type of Pan .....press(3) and (ENTER)"\par
+1080 LOCATE 17, 66: INPUT ; " ", IP\par
+1090 IF IP = 1 THEN LET IOP = 10\par
+1100 IF IP = 2 THEN LET IOP = 11\par
+1110 CLS : LOCATE 9, 28: PRINT "Pan placed in :"\par
+1120 LOCATE 10, 28: PRINT "-------------------"\par
+1130 LOCATE 13, 13: PRINT "-short green cropped area.... press(1) and (ENTER)"\par
+1140 LOCATE 15, 13: INPUT ; "-dry fallow area ..... press(2) and (ENTER)", IPL\par
+1150 IF IPL = 1 THEN LET IPP1 = 9\par
+1160 IF IPL = 2 THEN LET IPP1 = 10\par
+1170 IF IPP = 2 THEN 1200\par
+1180 CLS : LOCATE 12, 15: INPUT ; "Windward side distance of green crop in m :", WSD\par
+1190 GOTO 1210\par
+1200 CLS : LOCATE 12, 15: INPUT ; "Windward side distance of dry fallow in m : ", WSD\par
+1210 CLS : LOCATE 9, 15\par
+1220 PRINT " Pan is located at a station with very poor grass"\par
+1230 LOCATE 10, 15\par
+1240 PRINT "cover dry bare soil or undesirably a concrete or"\par
+1250 LOCATE 11, 15\par
+1260 PRINT "asphalt apron"\par
+1270 LOCATE 12, 40: PRINT "..... press (1) and (ENTER)"\par
+1280 LOCATE 16, 15\par
+1290 PRINT " Pan is placed in a small enclosure bu surrounded "\par
+1300 LOCATE 17, 15\par
+1310 PRINT "by tall crops"\par
+1320 LOCATE 18, 40: PRINT ".... press (2) and (ENTER)"\par
+1330 LOCATE 18, 70\par
+1340 INPUT ; " ", IPPAN\par
+1350 IF IPPAN = 2 THEN 1510\par
+1360 CLS : LOCATE 7, 25\par
+1370 PRINT "Determination of factor c"\par
+1380 LOCATE 8, 26: PRINT STRING$(25, "-")\par
+1390 LOCATE 10, 7: PRINT CHVAL$(25) + ":"\par
+1400 LOCATE 12, 16: PRINT "Dry, hot, very strong wind"\par
+1410 LOCATE 13, 38: PRINT "....press (1) and (ENTER"\par
+1420 LOCATE 14, 16: PRINT "Dry, warm, more strong wind"\par
+1430 LOCATE 15, 38: PRINT "..... press(2) and (ENTER)"\par
+1440 LOCATE 16, 16: PRINT "Mild damp, warm, more light wind"\par
+1450 LOCATE 17, 38: PRINT ".... press(3) and (ENTER)"\par
+1460 LOCATE 18, 16: PRINT "Damp-warm, more light wind"\par
+1470 LOCATE 19, 38: PRINT ":....press(4) and (ENTER)"\par
+1480 LOCATE 19, 69\par
+1490 INPUT ; " ", ICF\par
+1500 GOTO 1690\par
+1510 CLS : LOCATE 7, 25\par
+1520 PRINT "Determination of factor c"\par
+1530 LOCATE 8, 26: PRINT STRING$(25, "-")\par
+1540 LOCATE 10, 7: PRINT CHVAL$(25) + " : "\par
+1550 LOCATE 12, 16: PRINT "Damp-warm, windless"\par
+1560 LOCATE 13, 38: PRINT "....press(1) and (ENTER)"\par
+1570 LOCATE 14, 16: PRINT "Mild damp, warm, more light wind"\par
+1580 LOCATE 15, 38: PRINT "...press(2) and (ENTER)"\par
+1590 LOCATE 16, 16: PRINT "Dry, warm, more strong wind"\par
+1600 LOCATE 17, 38: PRINT ".....press(3) and (ENTER)"\par
+1610 LOCATE 18, 16: PRINT "Dry, hot , very strong wind"\par
+1620 LOCATE 19, 38: PRINT " .....press(4) and (ENTER)"\par
+1630 LOCATE 19, 69\par
+1640 INPUT ; " ", ICFF\par
+1650 IF ICFF = 1 THEN LET ICF = 5\par
+1660 IF ICFF = 2 THEN LET ICF = 6\par
+1670 IF ICFF = 3 THEN LET ICF = 7\par
+1680 IF ICFF = 4 THEN LET ICF = 8\par
+1690 LET CF = CF1(ICF)\par
+1700 RETURN\par
+1710 CLS : LOCATE 3, 5: PRINT " Selected type of Pan : "\par
+1720 LOCATE 6, 8: PRINT "-" + DPAN$(1): LOCATE 7, 42\par
+1730 PRINT ".....press (1) and (ENTER)"\par
+1740 LOCATE 8, 8: PRINT "-" + DPAN$(2): LOCATE 9, 42\par
+1750 PRINT "....press (2) and (ENTER)"\par
+1760 LOCATE 10, 8: PRINT "-" + DPAN$(3): LOCATE 11, 42\par
+1770 PRINT ".....press(3) and (ENTER)"\par
+1780 LOCATE 12, 8: PRINT "-" + DPAN$(4): LOCATE 13, 42\par
+1790 PRINT ".....press (4) and (ENTER)"\par
+1800 LOCATE 14, 8: PRINT "-" + DPAN$(5): LOCATE 15, 42\par
+1810 PRINT "...press(5) and (ENTER)"\par
+1820 LOCATE 16, 8: PRINT "-" + DPAN$(6): LOCATE 17, 42\par
+1830 PRINT "....press(6) and (ENTER)"\par
+1840 LOCATE 18, 8: PRINT "-" + DPAN$(7): LOCATE 19, 42\par
+1850 PRINT ":....press(7) and (ENTER)"\par
+1860 LOCATE 20, 8: PRINT "-" + DPAN$(8): LOCATE 21, 42\par
+1870 PRINT "......pres(8) and (ENTER)"\par
+1880 LOCATE 22, 8: PRINT "-" + DPAN$(9): LOCATE 23, 42\par
+1890 PRINT "....press (9) and (ENTER)"\par
+1900 INPUT ; " ", IOP\par
+1910 CLS : LOCATE 8, 30\par
+1920 PRINT "FOR " + CHVAL$(25) + " : "\par
+1930 LOCATE 9, 3: PRINT STRING$(13, "-")\par
+1940 LOCATE 12, 10: PRINT CHVAL$(26)\par
+1950 LOCATE 13, 27: PRINT "...." + PR$ + "(1)" + AE$\par
+1960 LOCATE 14, 10: PRINT CHVAL$(27)\par
+1970 LOCATE 15, 40: PRINT "...." + PR$ + "(2)" + AE$\par
+1980 LOCATE 15, 70\par
+1990 INPUT ; " ", ICLIM\par
+2000 IF ICLIM = 1 THEN LET ICLIM1 = 26\par
+2010 IF ICLIM = 2 THEN LET ICLIM1 = 27\par
+2020 LET CESP = EPAN * REC(IOP, IPL, ICLIM)\par
+2030 RETURN\par
+2040 REM\par
+2050 REM .......................Output on the display .............\par
+2060 REM\par
+2070  CLS : LOCATE 3, 8\par
+2080  PRINT CHVAL$(1) + "  " + CHVAL$(2) + "  " + "( " + CHVAL$(3) + ") "\par
+2090  LOCATE 4, 8: PRINT STRING$(66, "-")\par
+2100  LOCATE 6, 3: PRINT CHVAL$(4) + " : " + COUNTRY$\par
+2110  LOCATE 6, 30: PRINT CHVAL$(5) + "  : " + PLACE$\par
+2120  LOCATE 6, 55: PRINT CHVAL$(6) + " : " + MON$(MH)\par
+2130  LOCATE 8, 8: PRINT CHVAL$(7) + " : " + DPAN$(IOP)\par
+2140  LOCATE 9, 8: PRINT CHVAL$(8) + " : " + CHVAL$(IPP1)\par
+2150  IF IP <= 2 THEN 2180\par
+2160  LOCATE 10, 8\par
+2170  PRINT USING " (" + CHVAL$(35) + MA$ + " m2 )"; RPAR(IOP)\par
+2180  LOCATE 11, 3: PRINT CHVAL$(14) + " :"\par
+2190  IF IP < 3 THEN 2210\par
+2200 LOCATE 12, 17: PRINT CHVAL$(25) + " : " + CHVAL$(ICLIM1)\par
+2210 LOCATE 13, 17: PRINT USING CHVAL$(11) + " : " + MA$ + " " + VL$(5); WSD\par
+2220 IF ISRH = 1 THEN 2260\par
+2230 LOCATE 14, 17: PRINT USING CHVAL$(16) + " : " + MA$ + " " + VL$(1); RHMIN\par
+2240 LOCATE 14, 47: PRINT USING CHVAL$(17) + " : " + MA$ + " " + VL$(1); RHMAX\par
+2250 GOTO 2270\par
+2260 LOCATE 14, 17: PRINT USING CHVAL$(18) + " : " + MA$ + " " + VL$(5); WSD\par
+2270 LOCATE 15, 17: PRINT USING CHVAL$(19) + " : " + MA$ + " " + VL$(4); WIND\par
+2280 LOCATE 16, 17: PRINT USING CHVAL$(21) + " : " + MA$ + " " + VL$(2); EPAN\par
+2290 LOCATE 18, 3: PRINT CHVAL$(34) + " : "\par
+2300 LOCATE 19, 17: PRINT USING CHVAL$(12) + " : " + MA$; CF\par
+2310 LOCATE 20, 17: PRINT USING CHVAL$(24) + " : " + MA$; RKP(IP1, IRHM, K1)\par
+2320 IF IP <= 2 THEN 2350\par
+2330 LOCATE 21, 17: PRINT USING CHVAL$(32) + " : " + MA$; REC(IOP, IPL, ICLIM)\par
+2340 LOCATE 22, 17: PRINT USING CHVAL$(33) + " : " + MA$; CESP\par
+2350 LOCATE 23, 10: PRINT USING CHVAL$(1) + "  " + CHVAL$(2) + "   : " + MA$ + "  " + VL$(2); ETO\par
+2360 LOCATE 24, 10: PRINT STRING$(59, "-")\par
+2370 LOCATE 25, 1\par
+2380 RETURN\par
+2390 REM\par
+2400 REM  ......... OUTPUT on a printer .....................\par
+2410 REM\par
+2420 REM LPRINT: LPRINT: LPRINT\par
+2430 REM LPRINT SPACE$(10) CHVAL$(1) + "  " + CHVAL$(2) + "  " + "( " + CHVAL$(3) + ") "\par
+2440 REM LPRINT SPACE$(10)+STAR$+STAR$+STAR$+STAR1\par
+2450 REM\par
+2460 REM\par
+2470 REM\par
+2480 REM\par
+2490 REM\par
+2500 REM\par
+2510 REM\par
+2520 REM\par
+2530 REM\par
+2540 REM\par
+2550 REM\par
+2560 REM\par
+2570 REM\par
+2580 REM\par
+2590 REM\par
+2600 REM\par
+2610 REM\par
+2620 REM\par
+2630 REM\par
+2640 REM\par
+2650 REM\par
+2660 REM\par
+2670 REM\par
+2680 REM\par
+2690 REM\par
+2700 REM\par
+2710 REM\par
+2720 REM\par
+2730 REM\par
+2740 REM\par
+2750 REM\par
+2760 REM\par
+2770 REM\par
+2780 RETURN\par
+2790 REM\par
+2800 REM Pan coefficient Kp (tab. 18 and 19)\par
+2810 REM\par
+2820 FOR K = 1 TO 4\par
+2830 FOR I = 1 TO 16\par
+2840 FOR J = 1 TO 3\par
+2850 READ RKP(I, J, K)\par
+2860 NEXT J\par
+2870 NEXT I\par
+2880 NEXT K\par
+2920 DATA .55,.65,.75,.65,.75,.85,.70,.80,.85,.75,.85,.85\par
+2930 DATA .5,.6,.65,.6,.7,.75,.65,.75,.8,.7,.8,.8\par
+2940 DATA .45,.50,.60,.55,.60,.65,.60,.65,.70,.65,.70,.75\par
+2950 DATA .40,.45,.50,.45,.55,.60,.50,.60,.65,.55,.60,.65\par
+2990 DATA .75,.75,.80,1.0,1.0,1.0,1.1,1.1,1.1,1.1,1.1,1.1\par
+3000 DATA .65,.70,.70,.85,.85,.90,.95,.95,.95,.95,.95,.95\par
+3010 DATA .55,.60,.65,.75,.75,.75,.80,.80,.80,.80,.80,.80\par
+3020 DATA .50,.55,.60,.65,.70,.70,.70,.75,.75,.70,.70,.70\par
+3060 DATA .70,.80,.85,.60,.70,.80,.55,.65,.75,.50,.60,.70\par
+3070 DATA .65,.75,.80,.55,.65,.70,.50,.60,.65,.45,.55,.60\par
+3080 DATA .60,.65,.70,.50,.55,.65,.45,.50,.60,.40,.45,.55\par
+3090 DATA .50,.60,.65,.45,.50,.55,.40,.45,.50,.35,.40,.45\par
+3130 DATA 1.1,1.1,1.1,.85,.85,.85,.75,.75,.80,.70,.70,.75\par
+3140 DATA .95,.95,.95,.75,.75,.75,.65,.65,.70,.60,.60,.65\par
+3150 DATA .80,.80,.80,.65,.65,.65,.55,.60,.65,.50,.55,.60\par
+3160 DATA .70,.75,.75,.55,.60,.65,.50,.55,.60,.45,.50,.50\par
+3170 REM\par
+3180 REM DATA REC(I,IPL,ICLIM)\par
+3190 REM\par
+3200 FOR K = 1 TO 2\par
+3210 FOR J = 1 TO 2\par
+3220 FOR I = 1 TO 9\par
+3230 READ REC(I, J, K)\par
+3240 NEXT I\par
+3250 NEXT J\par
+3260 NEXT K\par
+3270 DATA 1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0\par
+3280 DATA 1.1,1.1,1.1,1.1,1.1,1.0,1.0,1.0,.95\par
+3290 DATA 1.05,1.05,1.05,1.05,1.05,1.05,1.0,1.0,1.0\par
+3300 DATA 1.25,1.25,1.25,1.25,1.25,1.0,1.0,1.0,.95\par
+3310 FOR I = 1 TO 8\par
+3320 READ CF1(I)\par
+3330 NEXT I\par
+3340 DATA .8,.85,.9,.95,1.05,1.1,1.2,1.3\par
+3350 FOR I = 1 TO 12\par
+3360 READ MON$(I)\par
+3370 NEXT I\par
+3380 DATA "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE"\par
+3390 DATA "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"\par
+3400 READ ST$, P1$, P2$, P3$\par
+3410 DATA "********","press (ENTER)", " \{ ", " \} "\par
+3420 READ MA$\par
+3430 DATA "###.##"\par
+3440 READ PR$, AE$, STAR$, STAR1$\par
+3450 DATA "press", "  and (ENTER)", "------------------","-------"\par
+3460 REM\par
+3470 REM Different types of pans\par
+3480 REM\par
+3490 FOR I = 1 TO 11\par
+3500 READ DPAN$(I)\par
+3510 NEXT I\par
+3520 DATA "CGI 20 dia. 5m, depth 2 m (USSR)", "Sun"\par
+3540 DATA "BPI" , "BPI"\par
+3560 DATA " Kenya","Au"\par
+3580 DATA "As", "CGI"\par
+3600 DATA "Sunken"\par
+3610 DATA "Class","Colorado"\par
+3620 FOR I = 1 TO 9\par
+3630 READ RPAR(I)\par
+3640 NEXT I\par
+3650 DATA 20.,10.5,3.3,2.6,1.2,.7,.3,.3,.2\par
+3660 FOR I = 1 TO 4\par
+3670 READ DWIND$(I)\par
+3680 NEXT I\par
+3690 DATA "Light","Moderate","Strong","Very strong"\par
+3700 FOR I = 1 TO 3\par
+3710 READ DRHM$(I)\par
+3720 NEXT I\par
+3730 DATA "Low","Medium","High"\par
+3740 FOR I = 1 TO 6\par
+3750 READ VL$(I)\par
+3760 NEXT I\par
+3770 DATA "%","mm/day","mm/month","km/daz","m","m2"\par
+3780 FOR I = 1 TO 35\par
+3790    READ CHVAL$(I)\par
+3800 NEXT I\par
+3810 DATA "Reference crop evapotranspiration"\par
+3815 DATA "ETO","Pan avaporation method"\par
+3820 DATA "Country","Place","Month","Typeof pan","Pan placed"\par
+3830 DATA  "in short green cropped area","in dry fallow area"\par
+3840 DATA "Windward side distance","of green crop","of dry fallow"\par
+3850 DATA "Given values","Relative humidity","RHmin","RHmax","RHmean"\par
+3860 DATA "Total 24 -hr wind run", "Pan evaporation"\par
+3865 DATA "Epan","factor c"\par
+3870 DATA "Pan coefficient","Kp","Climate","Humid-temperature"\par
+3880 DATA "Arid to semiarid dry season","Groundwater surrounding pan"\par
+3890 DATA "50m or more","Short green cover","Dry fallow"\par
+3895 DATA "Ratio Epan mentioned and Epan Colorado"\par
+3900 DATA "Corresponding Ratio Epan Sunken Colorado is","Calculation"\par
+3920 DATA "Pan area"\par
+3930 RETURN\par
+3940 CLS : LOCATE 12, 28\par
+3941 LOCATE 15, 5: PRINT ETO\par
+3950 PRINT "End of computation"\par
+3960 LOCATE 24, 1\par
+3970 END\par
+3980 REM List of szmbols\par
+3990 REM -  alfa (ALFA) : reflection (%)\par
+4000 REM - c (AFC) : adjustment factor to compensate for the effect of day\par
+4010 REM             and night weather conditions\par
+4020 REM - (CO) : cloudiness oktas\par
+4030 REM - (CT) : cloudiness tenths\par
+4040 REM - ea (EA) : mean saturation water vapour pressure (mbar)\par
+4050 REM ea-ed (EAED) : difference between the saturation vapour pressure\par
+4060 REM       at mean air temperature and the mean actual vapour pressure  \par
+4070 REM       of the air (mbar)\par
+4080 REM ed (ED) : mean actual vapour pressure (mbar)\par
+4090 REM ETo (ETO) : reference crop evapotranspiration (mm/day)\par
+5000 REM f(u)  (FU) : wind function\par
+5010 REM RHmax (RHMAX) : night time humidity (%)\par
+5020 REM RHmin (RHMIN) : relative humidity (%)\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+}
+ 

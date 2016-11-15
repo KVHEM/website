@@ -1,42 +1,346 @@
 ---
 title: "Software"
+subtitle: "Odvětví:"
+output: 
+  html_document: 
+    toc: yes
 ---
 
 
 ```{r, include=FALSE}
 library(htmltools)
 
-item = function(title, autor, popis = ""){
+item = function(title, href, autor, mail, popis = "", plat, txt = "", manual){
+  if(c(missing(txt), missing(manual), missing(mail))){
   div(
   div(class = "fluid-row",
     div(class = "col-sm-1"),
     div(class = "col-sm-1", 
-      div(
-        
-        span(class="glyphicon glyphicon-arrow-right", style="font-size:30px;vertical-align: baseline;padding-top:3px;margin:0px;line-height:1.4" ))
+      div(a(href = href, span(class="glyphicon glyphicon-floppy-save", style="font-size:30px;vertical-align:baseline;padding-top:3px;margin:0px;line-height:1.4" )))
     ), 
     div(class = "col-sm-10", 
            h4(title), 
-           h5(strong('autor:'), autor),
-           p(popis, style="padding-bottom:10px")
-          )
-  )
-  )
-}
+           h5(strong('autor:'), autor, '(',a(href=paste("mailto:",mail, sep= ""),mail),')'),
+           h5(strong('platforma:'), plat),
+           p(popis, style="padding-bottom:10px;text-align:justify"),
+           hr(width="50", size="5", align="center", noshade=TRUE))))
+  }
+  else {
+  div(
+  div(class = "fluid-row",
+    div(class = "col-sm-1"),
+    div(class = "col-sm-1", 
+      div(a(href = href, span(class="glyphicon glyphicon-floppy-save", style="font-size:30px;vertical-align:baseline;padding-top:3px;margin:0px;line-height:1.4" )))
+    ), 
+    div(class = "col-sm-10", 
+           h4(title), 
+           h5(strong('autor:'), autor, '(',a(href=paste("mailto:",mail, sep= ""),mail),')'),
+           h5(strong('platforma:'), plat),
+           p(popis, style="padding-bottom:10px;text-align:justify"),
+           p(txt,a(href = manual, span(class="glyphicon glyphicon-download-alt")), style="padding-bottom:10px;text-align:justify"),
+           hr(width="50", size="5", align="center", noshade=TRUE))))
+    }}
 ```
 
+### Hydraulika
 
-
-```{r, echo=FALSE}
+```{r, echo=FALSE, warning=FALSE}
 p(style="height:30px")
 
-item('PRUSAK', autor ="Pavel Pech (pech@fzp.czu.cz)", popis = "Autorizovaný software vytvořený v rámci řešení NAZV -QH91247. Software řeší průsak zemními hrázemi – homogenními i s těsnícím  jádrem uprostřed nebo u návodního líce, s různým uspořádáním vzdušného líce hráze, včetně různých typů drénů. Zemní hráz může být umístěna na propustném podloží s nepropusnou vrstvou v konečné i „nekonečné“ hloubce. Výsledkem řešení je určení specifického prosakujícího množství q a vykreslení průběhu hladiny v zemním tělese.")
-
-hr()
-
+item('FiltIII', href = 'download/filt_install3.exe', autor = "Pavel Pech", mail = "pech@fzp.czu.cz", popis = "Autorizovaný software – FiltIII. Software byl vytvořen v rámci řešení projektu NAZV – 1G46040. Pomocí programu FiltIII se řeší průsaky pod hydrotechnickými konstrukcemi a štětovými stěnami na nepropustném podloží konečné nebo „nekonečné“ výšky pomocí konformního zobrazení.", plat = "WIN93/95/2000/XP/VISTA", txt = "Postup při instalaci programu ke stažení zde ", manual = "download/postup-pri-instalaci-programu-filtiii.pdf")
 
 p(style="height:120px")
 ```
 
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
 
+item('PRUSAK', href = 'download/Prusak2.exe', autor = "Pavel Pech", mail = "pech@fzp.czu.cz", popis = "Autorizovaný software vytvořený v rámci řešení NAZV -QH91247. Software řeší průsak zemními hrázemi – homogenními i s těsnícím  jádrem uprostřed nebo u návodního líce, s různým uspořádáním vzdušného líce hráze, včetně různých typů drénů. Zemní hráz může být umístěna na propustném podloží s nepropusnou vrstvou v konečné i „nekonečné“ hloubce. Výsledkem řešení je určení specifického prosakujícího množství q a vykreslení průběhu hladiny v zemním tělese.", plat = "WIN93/95/2000/XP")
 
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('RadFlow', href = 'download/RadFlow.7z', autor ="Jiří Holub, Pavel Pech", mail = "holub@fzp.czu.cz", popis = "RadFlow  is program for solution of real well by means of Laplace transform. For inverse transform Algorith 368 developed by Stehfest is used. The calculation is done for given  well storativity  and coefficient of additional resistances at a well. The graphical output is dependence of dimensionless drawdown at a well and dimensionless time.", plat = "Nespecifikováno")
+
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('SReFTraS', href = 'download/SReFTraS4.zip', autor ="V. Havlíček, J. Pavlásek, M. Heřmanovský, R. Roub, P. Kubínová", mail = "havlicekv@fzp.czu.cz", popis = "The SReFTraS (Small Reservoirs Floodwave Transformation Software) is intended for multireservoirs flood wave transformation estimation. Model works with parameters of bathygraphy, depth, reservoir area where some of these parameters can be calculated in software. Other parameters are: spillway dimensions, hydrology input to reservoirs (one or more flood waves). The architecture of reservoirs system can be estimated as serial. Calculation of transformation function of one reservoir is also possible. In this software is implemented  simple iteration method. Data and graphical outputs are generated by this software. Program can be operated via GUI (Graphical User Interface) or TFUI (Text File User Interface). The program SReFTraS is developed under the GNU General Public License.", plat = "GNU/Linux")
+
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('Stehfest', href = 'download/Stehfest1.pdf', autor ="Radek Roub, Pavel Pech", mail = "roub@fzp.czu.cz", popis = "Program řeší výpočet snížení na reálném vrtu, kdy kromě působení dodatečných odporů ve vrtu a jeho blízkém okolí (skin effect), zahrnujeme do vyhodnocení i vliv vlastního objemu vrtu (wellbore-storage). Lze ho využít pro vyhodnocení stavu vrtu, popř. efektu provedené regenerace.", plat = "Nespecifikováno", txt = "Osvědčení o využití ke stažení zde ", manual = "download/stehfest_osvedceni1.pdf")
+
+p(style="height:120px")
+```
+
+### Hydrologie
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('1-2-HyModResMax5P', href = 'download/1-2-HyModResMax5P.zip', autor ="Martin Heřmanovský, Pavel Pech, Vojtěch Havlíček", mail = "hermanovsky@fzp.czu.cz", popis = "Autirozivaný software obsahuje 12 celistvých konceptuálních hydrologických modelů, které se liší svou strukturou a počtem parametrů. Hlavní procesy na povodí jsou zde schematizovány jedním lineárním/nelineárním zásobníkem, který reprezentuje nasycenost povodí. Některé modely uvažují také dotaci tohoto zásobníku ze zdrojů mimo povodí a naopak. Některé modely dále obsahují připojený zásobník reprezentující transformaci říční sítí. Uvedené modely mají od dvou do maximálně pěti kalibrovaných parametrů.", plat = "MS Windows")
+
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('2-3-HyModResLN6P', href = 'download/2-3-HyModResLN6P.zip', autor ="Martin Heřmanovský, Pavel Pech, Vojtěch Havlíček", mail = "hermanovsky@fzp.czu.cz", popis = "Autirozivaný software obsahuje 12 celistvých konceptuálních hydrologických modelů, které se liší svou strukturou a počtem parametrů. Hlavní procesy na povodí jsou schematizovány modulem tvořeným dvěma sériově spojenými zásobníky (z nichž druhý je lineární/nelineární), který reprezentuje nasycenost povodí. Některé modely uvažují také dotaci tohoto zásobníku ze zdrojů mimo povodí a naopak. Některé modely dále obsahují na modul připojený zásobník reprezentující transformaci říční sítí. Uvedené modely mají od tří do maximálně šesti kalibrovaných parametrů.", plat = "MS Windows")
+
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('ANN – Time series prediction using Artificial Neural Network', href = 'download/ANN.tar.gz', autor ="Martin Hanel", mail = "hanel@fzp.czu.cz", popis = "ANN is an environment for time series prediction using neural networks. It implements a two layer perceptron activated by sigmoidal function. The number of neurons in each layer can be determined by incremental search. Learning module allows for selection from batch and online learning mode with fixed or adaptive learning rate. ANN was originally developed to simulate runoff, however, other applications are possible. The program is written in Pascal. The functions are documented in the help file and a tutorial is also provided.", plat = "GNU/Linux")
+
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('ASVH', href = 'download/ASVH.tar.gz', autor ="Petr Máca", mail = "maca@fzp.czu.cz", popis = "ASVH je autorizovaný software zaměřený na analýzu sestupných větví hydrogramů. Software umožňuje stanovit parametry vybraných konstitučních vztahů, které charakterizují podzemní odtok z povodí. Řešením inverzní úlohy je možné stanovit parametry: lineární, nelineární mocninové, exponenciální nádrže a nádrží s prahovými objemy.", plat = "GNU/Linux")
+
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('BalDa', href = 'download/BalDa.tar', autor ="Vojtěch Havlíček", mail = "havlicekv@fzp.czu.cz", popis = "BalDa (BALance DAta) je nástroj pro vážení dat. Program umožňuje ohodnotit váhami datové záznamy určené pro modelování, tak aby méně časté záznamy s extrémějšími hodnotami, měly stejnou významnost jako  časté záznamy s obvyklými hodnotami. Program BalDa je vytvořen v programovacím jazyku Fortran 90 a je určen pro operačni systém GNU/Linux. Program BalDa je volně dostupný program. Vážení dat je prováděno pomocí metody k-nejbližších sousedů. Výstupem programu je textový soubor s váhami a soubory s grafickým vyjádřením průběhu vah.", plat = "GNU/Linux", txt = "Manuál ke stažení zde ", manual = "download/BalDa_manual.pdf")
+
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('CKSOM1', href = 'download/CKSOM1.zip', autor ="Martin Heřmanovský, Pavel Pech, Petr Máca", mail = "hermanovsky@fzp.czu.cz", popis = "Hydrologický model CKSOM1 je celistvý konceptuální srážko-odtokový model pro simulace celkového odtoku na pozorovaných povodích. Model obsahuje několik komponent reprezentujících hlavní procesy na povodí. Kalibrace modelu je zde řešena pomocí dvou globálních optimalizačních algoritmů. Dále je připojen program pro provedení jednorozměrové a dvourozměrové citlivostní analýzy.", plat = "MS Windows")
+
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('CroSolver', href = 'download/CroSolver.zip', autor ="Vojtěch Havlíček, Radek Roub, Pavel Pech", mail = "havlicekv@fzp.czu.cz", popis = "Program CroSolver (‚Cross section Solver‘) je určen pro výpočet průtočného profilu toku na základě souřadnic břehu, zaměřených laserovým scanováním. Program umožňuje preprocessing dat – identifikace vzájemných bodů a seřazení profilů, stanovení příčných profilů a výpočet průtočného profilu. Výstupem jsou textové soubory obsahující původní a nově vypočtené souřadnice bodů v příčných profilech toku. Volitelná je možnost grafických výstupů. Program CroSolver byl vytvořen jako knihovna funkcí pro programovací jazyk R.", plat = "GNU/Linux, MS Windows", txt = "Manuál ke stažení zde ", manual = "download/QuickGuide.pdf")
+
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('CroSolver_ToolBox', href = 'download/CroSolverToolBox.zip', autor ="F. Urban, R. Roub, V. Havlíček. P. Pech, T. Hejduk, L. Bureš, A. Reil", mail = "Urban@vrv.cz", popis = "Nástroj CroSolver_ToolBox (Cross-section Solver ToolBox) pro přípravu geometrických dat na podkladě syntézy dat hydrologického měření s daty leteckého laserového skenování byl vytvořen jako nástroj ArcToolBox pro ArcGIS pomocí programovacího jazyku Python. Nástroj umožňuje preprocessing dat na základě osy vodního toku a bodů LLS. Výstupem jsou textové soubory obsahující vypočtené souřadnice veškerých bodů a hydraulických charakteristik příčných profilů a soubory ve formátu shapefile popisující oblast zahloubeného koryta (polygon), povinných spojnic příčných profilů, břehů, pat svahů a osy (polyline) a lomových bodů (point).", plat = "MS Windows")
+
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('FORTANNS', href = 'download/FORTANNS2.zip', autor ="Vojtěch Havlíček", mail = "havlicekv@fzp.czu.cz", popis = "Program FORTANNS (‚FORecasting Time series Artificial Neural Network System‘) je určen pro modelování a předpověď časových řad. Výpočetním jádrem programu je model umělých neuronových sítí s učícím algoritmem zpětné propagace chyby v síti. V programu jsou implementovány metody evolučních algoritmů pro optimalizaci parametrů sítě. Součástí programu je GUI a modul generující grafické výstupy.", plat = "GNU/Linux", txt = "Manuál ke stažení zde ", manual = "download/FORTANNS_manual5.pdf")
+
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('HBV EM 1.0', href = 'download/HBV_EM_1.ZIP', autor ="Zbyněk Klose, Jiří Pavlásek", mail = "zaseklose@gmail.com", popis = "HBV EM 1.0 je distribuovaný hydrologický model. Koncept modelu vychází z modelu HBV-ETH. Hlavní řešenou částí modelu je komponenta sněhové pokrývky. Vývoj a tání sněhové pokrývky je možné modelovat na základě teplotního indexu, rozšířeného teplotního indexu nebo pomocí energetické bilance s minimálními požadavky na vstupní data. Model umožňuje automatickou optimalizaci parametrů modelu a přehledné grafické zobrazení výsledků.", plat = "MS Windows", txt = "Manuál ke stažení zde ", manual = "download/quick_guide_methods.zip")
+
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('HyModPar9P', href = 'download/HyModPar9P.zip', autor ="Martin Heřmanovský, Pavel Pech, Vojtěch Havlíček", mail = "hermanovsky@fzp.czu.cz", popis = "Autirozivaný software obsahuje 12 celistvých konceptuálních hydrologických modelů, které se liší svou strukturou a počtem parametrů. Hlavní procesy na povodí jsou zde schematizovány dvěma lineárními/nelineárními zásobníky, které vytváří dvouvrstvý modul nasycenosti povodí. Některé modely uvažují také dotaci zásobníku dolní vrstvy ze zdrojů mimo povodí a naopak. Některé modely dále obsahují připojený zásobník reprezentující transformaci říční sítí, který je na modul nasycenosti povodí připojen. Uvedené modely mají od pěti do maximálně devíti kalibrovaných parametrů.", plat = "MS Windows")
+
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+ p(style="height:30px")
+
+ div(
+   div(class = "fluid-row",
+     div(class = "col-sm-1"),
+     div(class = "col-sm-1"),
+     div(class = "col-sm-10",
+            h4("Chimera"),
+            p("Katedra se podílí na vývoji Chimery, prostředí pro konceptuální hydrologické modelování. Tomuto softwaru je věnován web chimera-hydrology.eu, který obsahuje soubory ke stažení, návod k instalaci, množství příkladů a teoretické základy prostředí. Odkaz na web ", a(href = "http://www.chimera-hydrology.eu", span(class="glyphicon glyphicon-arrow-right")), style="padding-bottom:10px;text-align:justify"),
+         hr(width="50", size="5", align="center", noshade=TRUE))))
+
+ p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('PMI Estimator', href = 'download/PMI.tar.gz', autor ="Martin Hanel", mail = "hanel@fzp.czu.cz", popis = "PMI Estimator is a tool originally intended to support input selection for neural networks (ANN) application. Provided a data frame of data it evaluates partial mutual information (PMI) between candidate inputs and the output. The significance of the values of is assessed by standard bootstrap procedure. The program is written in Pascal.", plat = "GNU/Linux")
+
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('PONS', href = 'download/PONS_web.tar2.gz', autor ="Petr Máca, Stanislav Horáček", mail = "maca@fzp.czu.cz", popis = "PONS – Predikce Odtoku Neuronovými Sítěmi – je srážko odtokový předpovědní a modelovací systém, který umožňuje předpověď povodňového odtoku v reálném čase v měřítku malých a středních povodí. Systém je založen na teorii vícevrstevnatého perceptronu, který je neuronovou sítí s dopředným šířením signálu. Systém zároveň umožňuje další výpočetní možnosti: preprocesing dat, nelineární transformace vzorových dat, vyhodnocení a stanovení optimální architektury neuronové sítě, umožňuje využít aktivační funkce ve formě logistické funkce, hyperbolické tangenty, exponenciální a lineární funkce. Učící algoritmus je založen na gradientní metodě prvního řádu založené na algoritmu zpětné propagace chyb s použitím učící konstanty a momenta. PONS systém umožňuje expertní kalibraci, testování a validaci předpovědního modelu v rámci multikriteriálního posouzení. PONS systém byl úspěšně aplikován při predikci povodňového odtoku na velkém množství povodí v České republice. V současné době probíhá testování předpovědí odtoku modelem PONS na vybraných povodích ČHMÚ, celkem byl PONS aplikován na cca 20 povodích České republiky v roce 2008.", plat = "GNU/Linux", txt = "Prezentace systému PONS na závěrečném Workshopu NAZV 1G46040 Monitoring a vyhodnocení extrémních odtokových poměrů v povodích drobných vodních toků z hlediska prevence a zmírňování povodňových škod v roce 2008 ke stažení zde ", manual = "download/PONS.pdf")
+
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('PONS-train-II', href = 'download/PONS2train.tar.gz', autor ="Petr Máca", mail = "maca@fzp.czu.cz", popis = "PONS-train-II je autorizovaný software, který je určen pro analýzu gradientních metod učení vrstevnatého perceptronu. Program analyzuje trénování neuronové sítě: 4 metodami škálovaných gradientů, ě variantami Levenberg–Marquardtového algoritmu, vybrané optimalizační metody regularizuje. Součástí programu je analýza různých aktivačních funkcí a ensemble simulace. Program umožňuje kontrolu saturace neuronů a jejich prevenci. Vzorový příklad testu architektury MLP pomocí PONS2train bude zaslán na vyžádání.", plat = "GNU/Linux")
+
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('RaRuPro', href = 'download/RARuPro.tar.gz', autor ="Petr Máca", mail = "maca@fzp.czu.cz", popis = "RaRuPro – Rainfall Runoff Properties – is C++ software application for the rainfall runoff event characteristics estimation. The estimated properties of flood event are hydrograph’s and hyetograph’s temporal and quantitative coefficients. The estimated coefficients describes the shape of rainfall runoff event.", plat = "GNU/Linux")
+
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('SEBRM', href = 'download/SEBRM.zip', autor ="Petr Máca", mail = "maca@fzp.czu.cz", popis = "SEBRM is short event based rainfall runoff model focused on ensemble simulation of flood waves. Model is based on the estimation of hillslope runoff via diffusion wave aproximation. Special ad-din is the evaluation of flood event characteristics. Program is written C++ language under the Linux OS.", plat = "GNU/Linux")
+
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('SORD! 2011', href = 'download/SORD.zip', autor ="Vojtěch Havlíček", mail = "havlicekv@fzp.czu.cz", popis = "Program SORD! (Solve OR Die!) byl vytvořen jako nástroj pro modelování pomocí genetického programování (GP) v prostředí programovacího jazyka R. SORD! je určen zejména pro modelování srážkoodtokového (SO) procesu, nicméně díky podstatě implementované metody GP může být program využit obecně i pro řešení jiných úloh, než je SO modelování. V programu SORD! bylo implementováno a rozšířeno standardní GP. Kromě standardních součástí GP disponuje program SORD! možností volby speciálních funkcí, možností víceběhového režimu a následného statistického vyhodnocení, možností ukládání textových i grafických výstupů a ovládáním pomocí TFUI (Text File User Interface) s R syntaxí. Program SORD! je freeware a opensource.", plat = "GNU/Linux", txt = "Manuál ke stažení zde ", manual = "download/SORD_manual.zip")
+
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('SORD! the latest version – 2012', href = 'download/SORD.tar.gz', autor ="Vojtěch Havlíček", mail = "havlicekv@fzp.czu.cz", popis = "SORD! 2012", plat = "GNU/Linux")
+
+p(style="height:120px")
+```
+
+### Hydropedologie
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('DRUGUI', href = 'download/DRUGUI.zip', autor ="Michal Kuráž, Vojtěch Havlíček", mail = "kuraz@fzp.czu.cz", popis = "Graphical User Interface Preprocessor and Postprocessor for the DRUtES finite element code based on DISLIN library
+This program is a graphical user interface preprocessor and postprocessor for the previously released DRUtES finite element code. This program is aimed to simplify the user configuration and results extraction from the DRUtES code.
+A crossplatform compatibility is preserved as the graphics is fully managed by the crossplatform DISLIN library (see http://www.mps.mpg.de/dislin/), nevertheless Unix like systems are preferred.
+This program is assumed to be launched separately from the DRUtES code and thus when certain configuration is obtained, it can be very easily transferred from e.g. laptop to some high performance computer cluster to perform the calculations, and afterwards the DRUtES code results can be extracted back to laptop/desktop pc and postprocessed by this code.", plat = "GNU/Linux")
+
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('DruTra2D', href = 'download/DruTra2D6.zip', autor ="Michal Kuráž", mail = "kuraz@fzp.czu.cz", popis = "This code performs numerical solution to the coupled problem of the unsteady Darcian flow in a variably saturated porous media and the unsteady solute transport, both in two dimensions and with the dual permeability concept. The problem was numerically solved by the Galerkin finite element method with respect to stability restrictions based on advection. The code is written in F subset of the Fortran programming language. Recommended for unix-like operating systems.", plat = "GNU/Linux")
+
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('SUD', href = 'download/SUD_ver01_project.xltx', autor ="J. Pavlásek, L. Jačka, V. Kajtárová, P. Máca, P. Pech", "pavlasek@fzp.czu.cz", popis = "Software SUD (Simulation of Unsteady Drainage) solves the unsteady flow from drainage system where the drains are situated close the impermeable layer. Solution is based on the principle of separation time and space variables. Model outputs are: maximum water table depth, water table shape, drainage outflow.", plat = "MS Windows/MS Office 2007")
+
+p(style="height:120px")
+```
+
+### Meteorologie
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('ETO', href = 'download/ETOII1.rtf', autor ="Pavel Pech, Jiří Pavlásek, Petra Kubínová", mail = "pech@fzp.czu.cz", popis = "Program ETO – Pan evaporation method. This program is suitable for determination reference crop evapotranspiration (Pan evaporation method) for 11 various types of pans: CGI (Russia); Sunken pan (Israel); Symmons pan (UK); BPI (USA); Aslyn pan (Denmark) and others , if we have results from measuring mean saturation vater vapour pressure; night time and relative humidity, total 24-hr wind run, etc. The results are: Factor c (adjustment factor – to compensate the effect of day and night weather conditions); Kp – Pan coefficient and Reference crop evapotranspiration ETO in (mm/day)", plat = "MS Windows")
+
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('Evapotrans', href = 'download/EVAPOTRAN.rtf', autor ="Pavel Pech", mail = "pech@fzp.czu.cz", popis = "Program for determination of reference crop evapotranspiration RCE. A slightly modified Penman equation is suggested here to determine RCE, involving wind function term. The method uses mean daily climatic data, since day and night time weather conditions considerably affect the level of evapotranspiration, an adjustment for this is included.", plat = "MS Windows")
+
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('RainCorCoef', href = 'download/RainCorCoef.zip', autor ="Petr Máca", mail = "maca@fzp.czu.cz", popis = "RainCorCoef is the software for the estimation of rainfall inter-station correlation. Evaluates the rainfall record for given period within the network of rain gauges via estimation of interstation correlation. Program is written C++ language under the Linux OS.", plat = "GNU/Linux")
+
+p(style="height:120px")
+```
+
+### Optimalizační nástroje
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('CRITMOD', href = 'download/CRITMOD.tar.gz', autor ="Petr Máca", mail = "maca@fzp.czu.cz", popis = "Software umožňuje stanovení vybraných hydrologických indexů, které jsou využívány pro ohodnocení hydrologických simulací. Software je napsán v jazyce C++ za použití šablonové knihovny Armadillo. Aplikaci reprezentuje knihovna založená třídě criteria. Softwarem je možné stanovit 17 hydrologických indexů, které mohou být využity při optimalizaci hydrologických modelů.", plat = "GNU/Linux")
+
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('PSO beta', href = 'download/PSO_beta_RIV.tar.gz', autor ="Petr Máca, Pavel Pech", mail = "maca@fzp.czu.cz", popis = "PSO beta – is the stochastic global optimization toolkit based on particle swarm optimisation algorithm. The PSO beta represents the class of global single objective optimization algorithms, the comparative analysis of 4 partial swarm updating strategies. For updating the model population the PSO beta uses the class of symmetrical Beta distribution. Beta distribution parameters are automatically tuned by the algorithm. The authorized software is written in C++ programming language using the recursive templates and template meta-programming employed via Armadillo C++ library, the random number generator is implemented via open source GSL library.", plat = "GNU/Linux")
+
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('PSO gama', href = 'download/PSO_gamma_RIV.tar.gz', autor ="Petr Máca, Pavel Pech", mail = "maca@fzp.czu.cz", popis = "PSO gama – is the stochastic global optimization toolkit based on particle swarm optimisation algorithm. The PSO beta represents the class of global single objective optimization algorithms, the comparative analysis of 4 partial swarm updating strategies. For updating the model population the PSO gama uses the class of Gamma distribution. Gamma distribution parameters are automatically tuned by the algorithm. The authorized software is written in C++ programming language using the recursive templates and template meta-programming employed via Armadillo C++ library, the random number generator is implemented via open source GSL library.", plat = "GNU/Linux")
+
+p(style="height:120px")
+```
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('vgSCDE', href = 'download/vgSCDE.tar1.gz', autor ="Petr Máca", mail = "maca@fzp.czu.cz", popis = "vgSCDE – variable generations in shuffled complex differential evolution — is the stochastic global optimization toolkit based on combing the shuffled complex mechanism with differential evolution. The vgSCDE represents the class of global single objective optimization algorithms and enables the estimation of control parameters via the ensemble simulation, the comparative analysis of 14 mutation strategy, the binomial crossover and maximum likelihood parameter estimation. The authorized software is written in C++ programming language using the recursive templates and template meta-programming employed via Armadillo C++ library.", plat = "GNU/Linux")
+
+p(style="height:120px")
+```
+
+### Vodní hospodářství
+
+```{r, echo=FALSE, warning=FALSE}
+p(style="height:30px")
+
+item('WADI', href = 'download/wadi_1.0a.tgz', autor ="Michal Kuráž, Marta Martínková", mail = "kuraz@fzp.czu.cz", popis = "WADI (Water Allocation and DIstribution) je strategická hra založená na simulaci hydrologických cyklů na povodí. Hráč zde zastupuje výkonný orgán regulující odběr vody ve spotřebišti pomocí regulace cenové politiky. Odběrateli jsou obyvatelé, průmysl o několika kategoriích významu a zemědělství. Prodej vody generuje hráči zisk, regulace odběru a vydávání změn pak způsobuje hráči ztráty. Cílem hry je předejít nedostatku vody, za udržení co možná nejvyšších zisků či minimalizace ztrát. Sucho je zde definováno poklesem hladiny vody ve vodárenské nádrži pod jistou kritickou mez. Nádrž je popsána batygrafickými křivkami. Pohyb vody v povodí – transport srážkové vody do vodárenské nádrže je zde řešen jako komplexní deterministický model, jsou zde uvažovány výpary, komplexní porézní prostředí od vadózní zóny po podzemní vodu, pohyb korytem řeky a povrchový odtok. Předložená verze software zahrnuje pouze terminálové uživatelské rozhraní. Program je distribuován ve formě zdrojového kódu standardu Fortran 2003/2008. Vzhledem k použitému standardu je možná kompilace pouze pomocí GCC verze 4.6 a vyšší, nebo Intel Fortran Compiler verze 12.1 a vyšší.", plat = "GNU/Linux")
+
+p(style="height:120px")
+```
+<hr width="50" size="5" col = white align="center" noshade style="visibility:hidden">

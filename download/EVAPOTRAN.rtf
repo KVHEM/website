@@ -1,0 +1,519 @@
+{\rtf1\ansi\deff0{\fonttbl{\f0\fnil\fcharset0 Courier New;}}
+{\*\generator Msftedit 5.41.21.2509;}\viewkind4\uc1\pard\lang1033\f0\fs22 10 REM\par
+20 REM      Program EVAPOTRANS\par
+30 REM\par
+40 OPTION BASE 1: DEFINT I-N: DEFSNG A-H, O-Z\par
+50 DIM CFF(13), CO(10), CT(12), FT(20), EAT(41), W1(7, 21), W2(7, 21), RANH(27, 13)\par
+60 DIM RASH(27, 13), PN(15, 13), AFC(17, 13), ED1(22, 13), ED2(22, 13), ED3(22, 13)\par
+70 DIM ED4(22, 13), MON$(12), VL$(25), PAR$(20), UI$(20), Z$(20), HEM(20)\par
+80 KEY OFF: READ AA$, P$, P1$, P2$\par
+90 FOR I = 1 TO 12: READ MON$(I): NEXT I: FOR I = 1 TO 16: READ VL$(I)\par
+100 NEXT I: FOR I = 1 TO 7: READ PAR$(I): NEXT I\par
+110 FOR I = 1 TO 9: READ UI$(I): NEXT I: FOR I = 1 TO 2\par
+120 READ HEM$(I): NEXT I: FOR I = 1 TO 8: READ Z$(I): NEXT I\par
+130 READ CAL$, GIV$, SK$, HH$\par
+140 CLS : LOCATE 5, 26: PRINT AA$: LOCATE 6, 26: PRINT "*"\par
+150 LOCATE 6, 48: PRINT "*": LOCATE 7, 26: PRINT "*": LOCATE 7, 31\par
+160 PRINT "Program ETO": LOCATE 7, 48: PRINT "*": LOCATE 8.26\par
+170 PRINT "*": LOCATE 8, 48: PRINT "*": LOCATE 9, 26: PRINT AA$\par
+180 GOSUB 2920: LOCATE 24, 17: PRINT P1$ + "To start program ETO" + P$ + P2$\par
+190 INPUT ; " ", A$: GOSUB 3010: INPUT ; " ", A$: CLS\par
+200 LOCATE 12, 25: PRINT " Start of computation": GOSUB 2370\par
+210 REM\par
+220 CLS : LOCATE 8, 23: INPUT ; " Country : ", COUNTRY$\par
+230 LOCATE 1223: INPUT ; " Place : ", PLACE$\par
+240 LOCATE 16, 23: INPUT ; " PERIOD : ", PERIOD$\par
+250 CLS : LOCATE 7, 10: PRINT "For :": LOCATE 11, 17\par
+260 PRINT " Northern Hemisphere press (1) and (ENTER)": LOCATE 16, 17\par
+270 INPUT ; " Southern Hemisphere press (2) and (ENTER)", IHEM\par
+280 CLS : LOCATE 8.23: INPUT ; " Altitude : ", ALT\par
+290 LOCATE 12, 23: INPUT " Latitude : ", RLAT\par
+300 LOCATE 16, 23: INPUT " Longitude : ", RLONG\par
+310 CLS : LOCATE 5, 30: PRINT "Month": LOCATE 8, 12:  PRINT "For:": PRINT\par
+320 PRINT " January....press (1) and (ENTER)"\par
+330 PRINT " February....press (2) and (ENTER)"\par
+340 PRINT " March....press (3) and (ENTER)"\par
+350 PRINT " April....press (4) and (ENTER)"\par
+360 PRINT " May....press (5) and (ENTER)"\par
+370 PRINT " June....press (6) and (ENTER)"\par
+380 PRINT " July....press (7) and (ENTER)"\par
+390 PRINT " August....press (8) and (ENTER)"\par
+400 PRINT " September....press (9) and (ENTER)"\par
+410 PRINT " October....press (10) and (ENTER)"\par
+420 PRINT " November....press (11) and (ENTER)"\par
+430 PRINT " December....press (12) and (ENTER)"\par
+440 INPUT ; " ", MH\par
+450 CLS : LOCATE 4, 22: PRINT " Input parameters : ": LOCATE 6, 8\par
+460 INPUT ; " Temperature Tmin....( 'C) : ", TMIN: LOCATE 8, 8\par
+470 INPUT ; " Temperature Tmax....( 'C) : ", TMAX: LOCATE 10, 8\par
+480 INPUT ; " Relative Humidity RHmin....(%) : ", RHMIN: LOCATE 12, 8\par
+490 INPUT ; " Relative Humidity RHmax....(%) : ", RHMAX: LOCATE 14, 8\par
+500 INPUT ; " Day=time Wind....(m/s) : ", UD: LOCATE 16, 8\par
+510 INPUT ; " Night-time Wind....(m/s) : ", UN: LOCATE 18, 8\par
+520 INPUT ; " 24-Hoour Wind Run....(km/day) : ", U: LOCATE 20, 8\par
+530 INPUT ; " Height where Wind Data are colected (m) : ", RMH: LOCATE 22, 8\par
+540 INPUT ; " Reflection alfa....(%) : ", ALFA\par
+550 LET UDN = UD / UN\par
+560 LET TM = (TNAX + TMIN) / 2!\par
+570 LET RHM = (RHMAX + RHMIN) / 2!\par
+580 REM\par
+590 REM ....(ea-ed)....\par
+600 REM\par
+610 CLS : LOCATE 8, 10: PRINT " If given : "\par
+620 LOCATE 10, 15: PRINT "Relaive Humiditz RHmin....press (1) and (ENTER)"\par
+630 LOCATE 12, 15: PRINT " Tdrybulb and Twetbulb....press (2) and (ENTER)"\par
+640 LOCATE 14, 15\par
+650 INPUT ; " Tdewpoint....press (3) and (ENTER)", II\par
+660 LET IP1 = INT(TM) + 1\par
+670 LET FP1 = TM - FIX(TM)\par
+680 LET EA = EAT(IP1) - (EAT(IP1) - EAT(IP1 + 1)) * FP1\par
+690 IF II = 1 THEN 710 ELSE 700\par
+700 IF II = 2 THEN 730 ELSE 1020\par
+710 LET ED = EA * RHM / 100!\par
+720 GOTO 1060\par
+730 CLS : LOCATE 5, 7\par
+740 PRINT " Psychometric readings from net drz bulb thermometers are :"\par
+750 LOCATE 8, 25: INPUT ; "Tdrybulb : ", TDB: LOCATE 10, 25\par
+760 INPUT ; "Twetbulb : ", TWB: LOCATE 15, 7\par
+770 PRINT "For : ": LOCATE 16, 12: PRINT " - ventilated thermometer....press (1) and (ENTER) "\par
+780 LOCATE 18, 12: INPUT ; " - non/ventilated thermometer ....press (2) and (ENTER)", III\par
+790 LET RTWBD = TWB / 2!: LET RTDB = TDB / 2!\par
+800 LET IP1 = INT(RTDB) + 1: LET FP1 = (RTDB - FIX(RTDB)) * 2!\par
+810 LET IP2 = INT(RTWBD) + 1: LET FP2 = (RTWBD - FIX(RTWBD)) * 2!\par
+820 IF III = 1 THEN 830 ELSE 920\par
+830 IF ALT < 1000 THEN 840 ELSE 880\par
+840 LET ED11 = ED1(IP1, IP20) - ((ED1(IP1, IP2) - ED1(IP1 + 1, IP2)) / 2!) * FP1\par
+850 IF FPI1 = 0 THEN 1000\par
+860 LET ED12 = ED1(IP1, IP2 + 1) - ((ED1(IP1, IP2 + 1) - ED1(IP1 + 1, IP2 + 1)) / 2!) * FP1\par
+870 GOTO 1000\par
+880 LET ED11 = ED2(IP1, IP2) - ((ED2(IP1, IP2) - ED2(IP1 + 1, IP2)) / 2!) * FP1\par
+890 IF FP1 = 0 THEN 1000\par
+900 LET ED12 = ED2(IP1, IP2 + 1) - ((ED2(IP1 + 1, IP2 + 1)) / 2!) * FP1\par
+910 GOTO 1000\par
+920 IF ALT < 1000 THEN 930 ELSE 970\par
+930 LET ED11 = ED3(IP1, IP2) - ((ED3(IP1, IP2) - ED3(IP1 + 1, IP2)) / 2!) * FP1\par
+940 IF FP1 = 0 THEN 1000\par
+950 LET ED12 = ED3(IP1, IP2 + 1) - ((ED3(IP1, IP2 + 1) - ED3(IP1 + 1, IP2 + 1)) / 2!) * FP1\par
+960 GOTO 1000\par
+970 LET ED11 = ED4(IP1, IP2) - ((ED4(IP1, IP2) - ED4(IP1 + 1, IP2)) / 2!) * FP1\par
+980 IF FP1 = 0 THEN 1000\par
+990 LET ED12 = ED4(IP1, IP2 + 1) - ((ED4(IP1 + 1, IP2 + 1)) / 2!) * FP1\par
+1000 LET ED = ED11 - ((ED11 - ED12) / 2!) * FP2\par
+1010 GOTO 1060\par
+1020 CLS : LOCATE 12, 12: INPUT ; "Tdewpoint : ", TDP\par
+1030 LET IP1 = INT(TDP) + 1\par
+1040 LET FP1 = TDP - FIX(TDP)\par
+1050 ED = EAT(IP1) - (EAT(IP1) - EAT(IP1 + 1)) * FPI\par
+1060 LET EAED = EA - ED\par
+1070 REM\par
+1080 REM ....f(u)....\par
+1090 REM\par
+1100 IF RMH <> 2 THEN 1110 ELSE 1160\par
+1110 LET VMH = RMH / .5\par
+1120 LET IP1 = INT(VMH)\par
+1130 LET FPI = (VMH - FIX(VMH)) * .5\par
+1140 LET CF = CFF(IP1) - ((CFF(IP1) - CFF(IP1 + 1)) / .5) * FP1\par
+1150 LET U = CF * U\par
+1160 LET FU = .27 * (1! + U / 100!)\par
+1170 REM\par
+1180 REM ....(W) and (1-W)\par
+1190 REM\par
+1200 LET TT = TM / 2\par
+1210 LET IP2 = INT(TT)\par
+1220 LET FP2 = (TT - FIX(TT)) * 2\par
+1230 IF ALT < 1000 THEN LET YP3 = 500 ELSE LET YP3 = 1000\par
+1240 LET RALT = ALT / ZP3\par
+1250 LET IP1 = INT(RALT) + 1\par
+1260 IF ALT >= 1000 THEN LET IP1 = IP1 + 1\par
+1270 LET FPI = (RALT - FIX(RALT)) * ZP3\par
+1280 LET W11 = W1(IP1, IP2) - ((W1(IP1, IP2) - W1(IP1 + 1, IP2)) / ZP3) * FP1\par
+1290 LET W12 = W1(IP1, IP2 + 1) - ((W1(IP1, IP2 + 1) - W1(IP1 + 1, IP2 + 1)) / ZP3) * FP1\par
+1300 LET W = W11 - ((W11 - W12) / 2!) * FP2\par
+1310 LET WW11 = W2(IP1, IP2) - ((W2(IP1, IP2) - W2(IP1 + 1, IP2)) / ZP3) * FP1\par
+1320 LET WW12 = W2(IP1, IP2 + 1) - ((W2(IP1, IP2 + 1) - W2(IP1 + 1, IP2 + 1)) / ZP3) * FP1\par
+1330 LET WF = WW11 - ((WW11 - WW12) / 2!) * FP2\par
+1340 REM\par
+1350 REM ....\par
+1355 REM ....Rn1 and Rns .....\par
+1360 REM\par
+1370 CLS : LOCATE 10, 10: PRINT "i f measured solar radiation (RS) :"\par
+1380 LOCATE 13, 16: PRINT " -  is available....press <1> and <ENTER>"\par
+1390 LOCATE 15, 16: INPUT ; " - ins't available press <2> and <ENTER>", IARS\par
+1400 IF IARS = 2 THEN 1430\par
+1410 CLS : LOCATE 12, 22: INPUT ; "Solar radiation Rs ....(mm/day) > ", RS\par
+1420 GOTO 1620\par
+1430 LET VALT = RLAT / 2!\par
+1440 LET IP = INT(VALT) + 1\par
+1450 LET FP1 = (VALT - FIX(VALT)) * 2!\par
+1460 IF IHEM = 1 THEN 1470 ELSE 1490\par
+1470 LET RA = RANH(IP, MH) - ((RAHN(IP, MH) - RAHN(IP + 1, MH)) / 2!) * FP1\par
+1480 GOTO 1500\par
+1490 LET RA = RASH(IP, MH) - ((RASH(IP, MH) - RASH(IP + 1, MH)) / 2!) * FP1\par
+1500 CLS : LOCATE 6, 7: PRINT "For calculation 'Rs' visual cloud observations :"\par
+1510 LOCATE 21, 7: INPUT ; "Cloudiness oktas : ", CLO\par
+1520 GOSUB 2690:   GOTO 1740\par
+1540 LOCATE 21, 7: INPUT ; "Cloudiness tenths : ", CLO\par
+1550 GOSUB 2741: GOTO 1740\par
+1570 CLS : LOCATE 12, 20: INPUT ; "Actual sunshine hours n...(hours) : ", SN\par
+1580 IF IHEM = 2 THEN 1590 ELSE 1600\par
+1590 IF MH < 7 THEN LET MH = MH + 6: IF MH > 7 THEN LET MH = MH - 6\par
+1600 LET VLAT = RLAT / 5!\par
+1610 LET IP2 = 5\par
+1620 IF FIX(VLAT) > 8 THEN 1670\par
+1630 LET IP = INT(VLAT) + 1\par
+1640 LET FPI = (VLAT - FIX(VLAT)) * 5!\par
+1650 LET GN = PN(IP, MH) - ((PN(IP, MH) - PN(IP + 1, MH)) / 5!) * FP1\par
+1660 GOTO 1720\par
+1670 LET IP2 = 2\par
+1680 LET VLAT = (RLAT - 40) / 2!\par
+1690 LET IP = INT(VLAT) + 9\par
+1700 LET FPI1 = (VLAT - FIX(VLAT)) * 2!\par
+1710 LET GN = PN(IP, MH) - ((PN(IP, MH) - PN(IP + 1, MH)) / 2!) * FP1\par
+1720 LET RNN = SN / GN\par
+1730 IF IARS = 1 THEN 1750\par
+1740 LET RS = (.25 + .5 * RNN) * RA\par
+1750 LET RNS = (1 - ALFA) * RS\par
+1760 REM\par
+1770 REM .....\par
+1780 REM\par
+1790 LET PUD = UD / 3\par
+1800 LET ORS = RS / 3\par
+1810 LET PRH = RHMAX / 30!\par
+1820 LET I1 = (INT(UDN) - 1) * 4 + 1\par
+1830 LET I2 = I1 + 4\par
+1840 LET IPP = 2\par
+1850 IF UDN = 1 OR UDN = 4 THEN LET I2 = I1\par
+1860 IF UD = 0 OR UD = 3 THEN LET IPP = 3\par
+1870 IF UD = 6 OR UD = 9 THEN LET IPP = 3\par
+1880 LET I3 = I1 - INT(PUD) + IPP\par
+1890 LET I4 = I3 + 1\par
+1900 LET I5 = I2 - INT(PUD) + IPP\par
+1910 LET I6 = I5 + 1\par
+1920 IF UD = 0 THEN LET I4 = I3\par
+1930 IF UD = 0 THEN LET I6 = I5\par
+1940 IF RHMAX > 9 THEN LET RHMAX = 90\par
+1950 LET J1 = (INT(PRH) - 1) * 4 + 1\par
+1960 LET J2 = J1 + 4\par
+1970 IF RHMAX = 30 OR RHMAX = 60 THEN LET J2 = J1\par
+1980 IF RHMAX = 90 THEN LET J2 = J1\par
+1990 LET J3 = J1 + INT(ORS) - 1\par
+2000 LET J4 = J3 + 1\par
+2010 LET J5 = J2 + INT(ORS) - 1\par
+2020 LET J6 = J5 + 1\par
+2030 IF RS = 12 THEN LET J4 = J3\par
+2040 IF RS = 12 THEN LET J6 = J5\par
+2050 IF RHMAX = 90 THEN LET J5 = J3\par
+2060 IF RHMAX = 90 THEN LET I6 = I4\par
+2070 LET FP1 = (UD - FIX(UD)) * 3!\par
+2080 LET AF11 = AFC(I3, J3) - ((AFC(I3, J3) - AFC(I4, J3)) / 3!) * FP1\par
+2090 LET AF12 = AFC(I3, J4) - ((AFC(I2, J4) - AFC(I4, J4)) / 3!) * FP1\par
+2100 LET AF13 = AFC(I3, J5) - ((AFC(I3, J5) - AFC(I4, J5)) / 3!) * FP1\par
+2110 LET AF14 = AFC(I3, J6) - ((AFC(I3, J6) - AFC(I4, J6)) / 3!) * FP1\par
+2120 LET AF21 = AFC(I5, J3) - ((AFC(I5, J3) - AFC(I6, J3)) / 3!) * FP1\par
+2130 LET AF22 = AFC(I5, J4) - ((AFC(I5, J4) - AFC(I6, J4)) / 3!) * FP1\par
+2140 LET AF23 = AFC(I5, J5) - ((AFC(I5, J5) - AFC(I6, J5)) / 3!) * FP1\par
+2150 LET AF24 = AFC(I5, J6) - ((AFC(I5, J6) - AFC(I6, J6)) / 3!) * FP1\par
+2160 LET FP1 = UDN - FIX(UDN)\par
+2170 LET AFF11 = AF11 - (AF11 - AF21) * FP1\par
+2180 LET AFF12 = AF12 - (AF12 - AF22) * FP1\par
+2190 LET AFF13 = AF13 - (AF13 - AF23) * FP1\par
+2200 LET AFF14 = AF14 - (AF4 - AF24) * FP1\par
+2210 LET FP1 = (ORS - FIX(ORS)) * 3!\par
+2220 LET AFG11 = AFF11 - ((AFF11 - AFF12) / 3!) * FP1\par
+2230 LET AFG12 = AFF13 - ((AFF13 - AFF14) / 3!) * FP1\par
+2240 LET FP1 = (PRH - FIX(PRH)) * 30!\par
+2250 LET AFC = AFG11 - ((AFG11 - AFG12) / 30!) * FP1\par
+2252 REM\par
+2254 REM ....Rn....\par
+2256 REM\par
+2260 LET RTM = TM / 2!: LET IP = INT(RTM) + 1\par
+2270 LET FP1 = (RTM - FIX(RTM)) * 2\par
+2280 IF TM = 36 THEN LET FTT = 18.1: IF FTT = 18.1 THEN 2300\par
+2290 LET FTT = FT(IP) - ((FT(IP) - FT(IP + 1)) / 2!) * FP1\par
+2300 LET FED = .34 - .044 * SQR(ED)\par
+2310 LET FFF = .1 + .9 * RNN\par
+2320 LET RN1 = FFF * FED * FED * FTT\par
+2330 LET RN = RNS - RN1\par
+2340 ETO = AFC * (WF * RN + W * FU * EAED)\par
+2342 CLS : LOCATE 10, 8: PRINT "If you wish to print results > "\par
+2344 LOCATE 12, 20: PRINT "- on a line printer..press <1> and <ENTER> "\par
+2346 LOCATE 14, 20: INPUT ; "- on display....press <2> and <ENTER>", IIPP\par
+2348 IF IIPP = 1 THEN 2349 ELSE 2350\par
+2349 GOSUB 3510: GOTO 3500\par
+2350 GOSUB 3190\par
+2360 GOTO 3500\par
+2370 REM\par
+2380 REM INPUT DATA\par
+2390 REM\par
+2400 OPEN "DATA1.DAT" FOR INPUT AS #1\par
+2410 FOR I = 1 TO 12: INPUT #1, CFF(I): NEXT I\par
+2420 FOR I = 1 TO 9: INPUT #1, CO(I): NEXT I\par
+2430 FOR I = 1 TO 11: INPUT #1, CT(I): NEXT I\par
+2440 FOR I = 1 TO 19: INPUT #1, FT(I): NEXT I\par
+2450 FOR I = 1 TO 40: INPUT #1, EAT(I): NEXT I\par
+2460 FOR I = 1 TO 6: FOR J = 1 TO 20: INPUT #1, W1(I, J): NEXT J: NEXT I\par
+2480 FOR I = 1 TO 6: FOR J = 1 TO 20: INPUT #1, W2(I, J)\par
+2490 NEXT J: NEXT I\par
+2500 FOR I = 1 TO 26: FOR J = 1 TO 12: INPUT #1, RANH(I, J)\par
+2510 NEXT J: NEXT I\par
+2520 FOR I = 1 TO 26: FOR J = 1 TO 12: INPUT #1, RASH(I, J)\par
+2530 NEXT J: NEXT I\par
+2540 FOR I = 1 TO 14: FOR J = 1 TO 12: INPUT #1, PN(I, J)\par
+2550 NEXT J: NEXT I\par
+2560 FOR I = 1 TO 16: FOR J = 1 TO 12: INPUT #1, AFC(I, J)\par
+2570 NEXT J: NEXT I\par
+2580 FOR I = 1 TO 21: FOR J = 1 TO 12: INPUT #1, ED1(I, J)\par
+2590 NEXT J: NEXT I\par
+2600 FOR I = 1 TO 12: FOR J = 1 TO 12: INPUT #1, ED2(I, J)\par
+2610 NEXT J: NEXT I\par
+2620 FOR I = 1 TO 21: FOR J = 1 TO 12: INPUT #1, ED3(I, J)\par
+2630 NEXT J: NEXT I\par
+2640 FOR I = 1 TO 21: FOR J = 1 TO 12: INPUT #1, ED4(I, J)\par
+2650 NEXT J: NEXT I\par
+2660 CLOSE #1\par
+2670 RETURN\par
+2680 REM\par
+2690 REM SUB DETERMINATION RNN\par
+2700 REM\par
+2710 LET IP1 = FIX(CLO) + 1: LET FP1 = CLO - FIX(CLO)\par
+2730 LET RNN = CO(IP1) - (CO(IP1) - CO(IP1 + 1)) * FP1\par
+2740 RETURN\par
+2741 LET IP1 = FIX(CLO) + 1: LET FP1 = CLO - FIX(CLO)\par
+2742 LET RNN = CT(IP1) - (CT(IP1) - CT(IP1 + 1)) * FP1\par
+2743 RETURN\par
+2750 DATA "* * * * ","press <ENTER> ","\{ "," \}"\par
+2760 DATA " Janary "," February "," March "," April "," May "," June "\par
+2770 DATA " July "," August "," Sepember "," October "," November "\par
+2780 DATA " December "\par
+2790 DATA "Tmin :","Tmax :","RHmin :","RHmax :","Uday :","Unight :"\par
+2800 DATA "U 24-hrs :","Alfa :","Rs :","n :","Tdewpoint :"\par
+2810 DATA "Tdrybulb :","Twetbulb :","Cloudiness tenths :"\par
+2820 DATA "Cloudiness tenths :","Ud/Un : ","Country : "\par
+2830 DATA "Place : ","Month : ","Altitude : ","Latitude : ","Longitude : "\par
+2840 DATA "Reference crop evapotranspiration (ETo) "\par
+2850 DATA " (mm/day) "," (m/s) "," (mbar) "," (km/day) "," (%) "\par
+2860 DATA " (deg. C) "," (m) "," (deg. ) "," (hours) "\par
+2870 DATA "Northern Hemisphere ","Southern Hemisphere "\par
+2880 DATA " W : "," Rn : "," (1-W) : "," f(u) : "," (ea-ed) :"\par
+2890 DATA " c : "," ETo : "," --------\par
+2900 DATA " Calculatin : "," Given values : ","###.##","  "\par
+2902 DATA " ( bz Penman ) "\par
+2910 RETURN\par
+2920 PRINT : PRINT : PRINT : PRINT\par
+2930 PRINT " Program for determination of reference crop evapo-"\par
+2940 PRINT " transpiration (ETo). A slightly modified Penman equation"\par
+2950 PRINT " is suggested here to determine ETO, involving wind function "\par
+2960 PRINT " term. The method uses mean daily climatic data; since day "\par
+2970 PRINT " and night time weather conditions considerably affect "\par
+2980 PRINT " the lavel of evapotranspiration, an adjustment for this "\par
+2990 PRINT " is included."\par
+3000 PRINT\par
+3010 CLS : PRINT : PRINT : PRINT\par
+3020 PRINT " The form of  the equation used in this method is :"\par
+3030 LOCATE 7.17: PRINT "ETO=AFC. (W.RN +(1-W).FU.(EA - ED)"\par
+3040 LOCATE 8, 21: PRINT " radiation aerodynamic "\par
+3050 LOCATE 9, 23: PRINT "tern tern "\par
+3060 PRINT " where :"\par
+3070 PRINT " W =temperature related weighting factor "\par
+3080 PRINT " RN = net radiation in equivalent evaporation "\par
+3090 PRINT " in mm/day "\par
+3100 PRINT " FU = wind-related function "\par
+3110 PRINT " (EA-ED)= difference between the saturation vapour "\par
+3120 PRINT " pressure at mean air temperature and the"\par
+3130 PRINT " mean actual vapour pressure of the air, both"\par
+3140 PRINT "in mbar"\par
+3150 PRINT " AFC = adjustment factor to compensate for"\par
+3160 PRINT " the effect of day and night weather conditions"\par
+3170 LOCATE 24, 20: PRINT P1$ + " To continue " + P$ + P2$\par
+3180 RETURN\par
+3185 REM\par
+3190 REM ....output on a display....\par
+3195 REM\par
+3200 CLS : LOCATE 3, 10: PRINT PAR$(7) + HH$\par
+3202 LOCATE 4, 10: PRINT STRING$(54, "*")\par
+3210 LOCATE 6, 5: PRINT PAR$(1) + COUNTRY$: LOCATE 6, 30:\par
+3220 PRINT PAR$(2) + PLACE$: LOCATE 6, 50: PRINT PAR$(3) + MON$(MH)\par
+3230 PRINT : LOCATE 7, 25: PRINT HEM$(IHEM)\par
+3240 LOCATE 10, 5: PRINT GIV$: LOCATE 12, 5\par
+3250 PRINT USING VL$(1) + SK$ + UI$(6); TMIN\par
+3260 LOCATE 12, 31: PRINT USING VL$(2) + SK$ + UI$(6); TMAX: LOCATE 12, 57\par
+3270 PRINT USING VL$(3) + SK$ + UI$(5); RHMIN\par
+3280 LOCATE 13, 5: PRINT USING VL$(4) + SK$ + UI$(5); RHMAX\par
+3290 LOCATE 13, 31: PRINT USING VL$(5) + SK$ + UI$(2); UD\par
+3300 LOCATE 13, 57: PRINT USING VL$(6) + SK$ + UI$(2); UN\par
+3310 LOCATE 14, 5: PRINT USING VL$(7) + SK$ + UI$(4); U\par
+3320 LOCATE 14, 31: PRINT USING VL$(16) + SK$; UDN\par
+3330 LOCATE 14, 57: PRINT USING VL$(8) + SK$ + UI$(5); ALFA\par
+3340 LOCATE 15, 5: PRINT USING VL$(9) + SK$ + UI$(1); RS\par
+3350 LOCATE 15, 31: PRINT USING VL$(10) + SK$ + UI$(9); SN\par
+3360 IF II = 2 THEN 3370 ELSE 3390\par
+3370 LOCATE 16, 5: PRINT USING VL$(12) + SK$ + UI$(6); TDB\par
+3380 LOCATE 16, 31: PRINT USING VL$(13) + SK$ + UI$(6); TWB: GOTO 3400\par
+3390 IF II = 1 THEN 3400: LOCATE 16, 5: PRINT USING VL$(11) + SK$ + UI$(6); TDP\par
+3400 IF IVACO = 1 THEN 3410 ELSE 3440\par
+3410 IF IEXL = 1 THEN 3420 ELSE 3430\par
+3420 LOCATE 17, 5: PRINT USING VL$(14) + SK$; CO: GOTO 3440\par
+3430 LOCATE 17, 5: PRINT USING VL$(15) + SK$; CLO\par
+3440 LOCATE 18, 5: PRINT CAL$\par
+3450 LOCATE 20, 5: PRINT USING Z$(1) + SK$; WF: LOCATE 20, 31\par
+3460 LPRINT USING Z$(3) + SK$; W: LOCATE 20, 57: PRINT USING Z$(2) + SK$; RN\par
+3465 LOCATE 21, 5: PRINT USING Z$(4) + SK$; FU\par
+3470 LOCATE 21, 31: PRINT USING Z$(5) + SK$ + UI$(3); EAED\par
+3480 LOCATE 21, 57: PRINT USING Z$(6) + SK$; AFC\par
+3490 LOCATE 23, 9: PRINT USING PAR$(7) + " : " + SK$ + UI$(1); ETO\par
+3500 RETURN\par
+3510 REM\par
+3520 REM .....output on a line printer....\par
+3530 REM\par
+3540 LPRINT : LPRINT : LPRINT BL$ + BL$ + PAR$(7)\par
+3550 LPRINT BL$ + BL$ + BL$ + PAR$(1) + COUNTRY$\par
+3560 LPRINT BL$ + BL$ + BL$ + PAR$(2) + PLACE$: LPRINT BL$ + BL$ + BL$ + PAR$(3) + MON$(MH)\par
+3570 LPRINT : LPRINT BL$ + BL$ + BL$ + HEM$(IHEM)\par
+3580 LPRINT : LPRINT SPACE$(30) + GIV$\par
+3590 LPRINT USING BL$ + BL$ + BL$ + VL$(1) + SK$ + UI$(6); TMIN\par
+3600 LPRINT USING BL$ + BL$ + BL$ + VL$(2) + SK$ + UI$(6); TMAX\par
+3610 LPRINT USING BL$ + BL$ + BL$ + VL$(3) + SK$ + UI$(5); RHMIN\par
+3620 LPRINT USING BL$ + BL$ + BL$ + VL$(4) + SK$ + UI$(5); RHMAX\par
+3630 LPRINT USING BL$ + BL$ + BL$ + VL$(5) + SK$ + UI$(2); UD\par
+3640 LPRINT USING BL$ + BL$ + BL$ + VL$(6) + SK$ + UI$(2); UN\par
+3650 LPRINT USING BL$ + BL$ + BL$ + VL$(6) + SK$ + UI$(2); UN\par
+3660 LPRINT USING BL$ + BL$ + BL$ + VL$(7) + SK$ + UI$(2); U\par
+3670 LPRINT USING BL$ + BL$ + BL$ + VL$(16) + SK$; UDN\par
+3680 LPRINT USING BL$ + BL$ + BL$ + VL$(8) + SK$ + UI$(5); ALFA\par
+3690 LPRINT USING BL$ + BL$ + BL$ + VL$(9) + SK$ + UI$(1); RS\par
+3700 LPRINT USING BL$ + BL$ + BL$ + VL$(10) + SK$ + UI$(9); SN\par
+3710 IF II = 2 THEN 3720 ELSE 3740\par
+3720 LPRINT USING BL$ + BL$ + BL$ + VL$(12) + SK$ + UI$(6); TDB\par
+3730 LPRINT USING BL$ + BL$ + BL$ + VL$(13) + SK$ + UI$(6); TWB: GOTO 3400\par
+3740 IF II = 1 THEN 3750: LPRINT USING BL$ + BL$ + BL$ + VL$(11) + SK$ + UI$(6); TDP\par
+3750 IF IVACO = 1 THEN 3760 ELSE 3790\par
+3760 IF IEXL = 1 THEN 3770 ELSE 3780\par
+3770 LPRINT USING BL$ + BL$ + BL$ + VL$(14) + SK$; CO: GOTO 3790\par
+3780 LPRINT USING BL$ + BL$ + BL$ + VL$(15) + SK$; CLO\par
+3790 LPRINT BL$ + BL$ + CAL$\par
+3800 LPRINT USING BL$ + BL$ + BL$ + Z$(1) + SK$; WF\par
+3810 LPRINT USING Z$(3) + SK$; W: LOCATE 19, 55: LPRINT USING Z$(2) + SK$; RN\par
+3820 LPRINT USING BL$ + BL$ + BL$ + Z$(2) + SK$; RN: LPRINT USING BL$ + BL$ + BL$ + Z$(4) + SK$; FU\par
+3830 LPRINT USING BL$ + BL$ + BL$ + Z$(5) + SK$ + UI$(3); EAED\par
+3840 LPRINT USING BL$ + BL$ + BL$ + Z$(6) + SK$; AFC\par
+3850 LPRINT USING BL$ + BL$ + BL$ + PAR$(7) + SK$ + UI$(1); ETO\par
+3860 RETURN\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+                                \par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+}
+ 
